@@ -1,0 +1,103 @@
+/* Emerg Music design tokens — Plum Velvet. Single source of truth.
+   Tailwind v4: import this file, the @theme block exposes tokens as utilities. */
+
+:root {
+  /* Brand palette */
+  --night: #130f18;
+  --plum: #38213f;
+  --violet: #8f50b5;
+  --lilac: #d6a6f5;
+  --ivory: #f8f2ff;
+
+  /* Neutrals derived from Night / Ivory (restrained, dominant) */
+  --night-raised: #1b1522;   /* cards on Night */
+  --night-line: #2c2236;     /* hairline borders */
+  --ivory-muted: #b9aec6;    /* secondary text, 8.9:1 on Night */
+  --ivory-faint: #8a7f98;    /* tertiary text, 5.0:1 on Night */
+
+  /* Semantic surfaces */
+  --bg: var(--night);
+  --surface: var(--night-raised);
+  --surface-strong: var(--plum);
+  --border: var(--night-line);
+  --text: var(--ivory);
+  --text-muted: var(--ivory-muted);
+  --accent: var(--violet);
+  --accent-soft: var(--lilac);
+  --on-accent: var(--ivory);
+
+  /* Status (muted to sit inside the palette) */
+  --success: #6fcf97;
+  --warning: #e8b45a;
+  --danger: #ef7b8a;
+  --info: var(--lilac);
+
+  /* Focus */
+  --focus-ring: 0 0 0 2px var(--night), 0 0 0 4px var(--lilac);
+
+  /* Type */
+  --font-heading: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 3rem;
+
+  /* Shape and space (4px grid) */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-6: 24px; --space-8: 32px; --space-12: 48px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 120ms;
+  --dur: 240ms;
+  --dur-slow: 400ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 0ms; --dur: 0ms; --dur-slow: 0ms; }
+}
+
+/* Tailwind v4 theme bridge */
+@theme inline {
+  --color-night: var(--night);
+  --color-plum: var(--plum);
+  --color-violet: var(--violet);
+  --color-lilac: var(--lilac);
+  --color-ivory: var(--ivory);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-muted: var(--text-muted);
+  --font-heading: var(--font-heading);
+  --font-sans: var(--font-body);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+}
+
+/* Component rules */
+.btn { font: 600 var(--text-sm) var(--font-body); border-radius: var(--radius-pill); padding: 10px 20px;
+  min-height: 44px; border: 1px solid transparent; cursor: pointer;
+  transition: background var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease); }
+.btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.btn:active { transform: scale(0.98); }
+.btn-primary { background: var(--violet); color: var(--ivory); }
+.btn-primary:hover { background: #9d5fc2; }
+.btn-secondary { background: transparent; color: var(--ivory); border-color: var(--night-line); }
+.btn-secondary:hover { background: var(--night-raised); }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); }
+.alert { border: 1px solid var(--border); border-left-width: 4px; border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4); background: var(--surface); }
+.alert-success { border-left-color: var(--success); }
+.alert-warning { border-left-color: var(--warning); }
+.alert-danger { border-left-color: var(--danger); }
+.input { background: var(--night); color: var(--ivory); border: 1px solid var(--night-line);
+  border-radius: var(--radius-sm); padding: 10px 14px; min-height: 44px; font: var(--text-base) var(--font-body); }
+.input:focus-visible { outline: none; border-color: var(--lilac); box-shadow: var(--focus-ring); }

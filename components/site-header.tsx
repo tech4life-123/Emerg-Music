@@ -10,11 +10,11 @@ export async function SiteHeader() {
   const role = user ? (await supabase.from("profiles").select("role").eq("id", user.id).single()).data?.role : null;
   return (
     <header className="border-b border-border">
-      <nav className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6" aria-label="Main">
-        <Link href="/" aria-label="Emerg Music">
-          <Image src="/brand/logo-horizontal.svg" alt="Emerg Music" width={190} height={32} priority />
+      <nav className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3 sm:px-6" aria-label="Main">
+        <Link href="/" aria-label="Emerg Music" className="shrink-0">
+          <Image src="/brand/logo-horizontal.svg" alt="Emerg Music" width={190} height={32} priority className="h-8 w-auto max-w-none" />
         </Link>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {user ? (
             <>
               {role === "admin" && <Link className="btn btn-secondary inline-flex items-center" href="/admin">{t.admin.title}</Link>}

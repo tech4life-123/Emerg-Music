@@ -8,7 +8,7 @@ export const metadata = { title: "Apply" };
 export default async function ApplyPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { t } = await getMessages();
   const { supabase, user, role } = await requireUser("/studio/apply");
-  if (role !== "listener") redirect("/studio");
+  if (role === "artist") redirect("/studio"); // admins may also apply for their own artist profile
   const { data: pending } = await supabase.from("artist_applications").select("id").eq("user_id", user.id).eq("status", "pending").limit(1);
   if (pending?.length) redirect("/studio");
   const { error } = await searchParams;

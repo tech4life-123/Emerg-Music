@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@import "../design/tokens.css";
+
+html { color-scheme: dark; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { font-family: var(--font-heading); letter-spacing: -0.01em; }
+a:focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: 4px; }

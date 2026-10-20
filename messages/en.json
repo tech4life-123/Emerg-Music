@@ -1,0 +1,22 @@
+{
+  "brand": { "tagline": "Discover. Stream. Share." },
+  "nav": { "home": "Home", "signIn": "Sign in", "signUp": "Create account", "signOut": "Sign out", "profile": "Profile" },
+  "home": {
+    "title": "Music from Liberia and Africa, in one place.",
+    "body": "Emerg Music is being built in the open. Accounts and profiles work today. The catalog, player and Artist Studio arrive in the next phases.",
+    "status": "Status: foundation phase. Streaming is not live yet."
+  },
+  "auth": {
+    "email": "Email", "password": "Password", "displayName": "Display name",
+    "signInTitle": "Sign in", "signUpTitle": "Create your account",
+    "signInAction": "Sign in", "signUpAction": "Create account",
+    "noAccount": "New here?", "haveAccount": "Already have an account?",
+    "checkEmail": "Check your email to confirm your account, then sign in.",
+    "passwordHint": "At least 8 characters.",
+    "error": "Something went wrong. Check your details and try again."
+  },
+  "profile": {
+    "title": "Your profile", "language": "Language", "save": "Save changes", "saved": "Profile saved.",
+    "role": "Account type", "roles": { "listener": "Listener", "artist": "Artist", "admin": "Admin" }
+  }
+}

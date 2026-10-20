@@ -49,6 +49,8 @@ export async function submitRelease(fd: FormData) {
   if (fd.get("accept") !== "on") redirect(`/studio/releases/${releaseId}?error=rights`);
   const { count } = await supabase.from("tracks").select("id", { count: "exact", head: true }).eq("release_id", releaseId);
   if (!count) redirect(`/studio/releases/${releaseId}?error=notracks`);
+  const { count: noAudio } = await supabase.from("tracks").select("id", { count: "exact", head: true }).eq("release_id", releaseId).is("audio_path", null);
+  if (noAudio) redirect(`/studio/releases/${releaseId}?error=noaudio`);
   const decl = await supabase.from("rights_declarations").insert({ release_id: releaseId, user_id: user.id, statement_version: RIGHTS_VERSION });
   if (decl.error) redirect(`/studio/releases/${releaseId}?error=1`);
   const { error } = await supabase.from("releases").update({ status: "in_review" }).eq("id", releaseId);

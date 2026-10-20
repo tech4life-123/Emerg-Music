@@ -31,3 +31,11 @@
 - **Audio upload is NOT built**: it needs audio storage credentials. The UI says so; no fake upload.
 - Checks: `tsc` and `next build` pass. Workflow tested in the database (rolled back): consent required; artist cannot approve themselves, self-publish, or submit without a rights declaration; admin approve/publish writes audit rows; removal needs a reason.
 - **OPEN SECURITY ISSUE**: test showed an artist can attach a track to another artist's release. Fix is `supabase/migrations/0004_tracks_match_release_artist.sql` (NOT applied; the Supabase tool asked for confirmation). Apply it before real artists use the Studio.
+
+## Milestone 5 — Audio storage + artist upload
+- Cloudflare R2 bucket `emerg-audio` created (private bucket, public r2.dev read URL set as NEXT_PUBLIC_MEDIA_BASE_URL).
+- Artist uploads: server action validates ownership/draft/type/size, returns 10-min signed PUT URL; browser uploads direct to R2; second action records audio_path.
+- Release submit now requires audio on every track.
+- Migration 0005 (NOT applied): audio_path must be under audio/<artist>/<track>/.
+- Needs: R2 CORS (PUT/GET/HEAD), R2_* env vars in Vercel, 0004 + 0005 run in Supabase.
+- Not tested end-to-end: sandbox cannot reach R2/Supabase.

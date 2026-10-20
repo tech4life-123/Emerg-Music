@@ -4,6 +4,7 @@ import { getLocale, getMessages } from "@/lib/i18n";
 import { requireUser } from "@/lib/auth";
 import { RIGHTS_STATEMENT } from "@/lib/rights";
 import { addTrack, submitRelease } from "../../actions";
+import { AudioUpload } from "@/components/audio-upload";
 
 export const metadata = { title: "Release" };
 
@@ -17,7 +18,7 @@ export default async function ReleasePage({ params, searchParams }: { params: Pr
   const { data: release } = await supabase.from("releases").select("id, title, type, status, removal_reason").eq("id", id).maybeSingle();
   if (!release) notFound();
   const { data: tracks } = await supabase.from("tracks").select("id, title, track_number, audio_path").eq("release_id", id).order("track_number");
-  const errMsg = sp.error === "rights" ? t.studio.errorRights : sp.error === "notracks" ? t.studio.errorNoTracks : sp.error ? t.studio.errorGeneric : null;
+  const errMsg = sp.error === "rights" ? t.studio.errorRights : sp.error === "notracks" ? t.studio.errorNoTracks : sp.error === "noaudio" ? t.studio.errorNoAudio : sp.error ? t.studio.errorGeneric : null;
   const draft = release.status === "draft";
   return (
     <div className="flex max-w-2xl flex-col gap-6">
@@ -30,7 +31,7 @@ export default async function ReleasePage({ params, searchParams }: { params: Pr
       {errMsg && <p role="alert" className="alert alert-danger text-sm">{errMsg}</p>}
       <section>
         <h2 className="mb-3 text-xl font-bold">{t.studio.tracks}</h2>
-        {tracks?.length ? <ol className="card divide-y divide-border">{tracks.map((tr) => <li key={tr.id} className="p-3"><span className="mr-2 text-muted tabular-nums">{tr.track_number}.</span>{tr.title}</li>)}</ol> : <p className="text-muted">{t.studio.noTracks}</p>}
+        {tracks?.length ? <ol className="card divide-y divide-border">{tracks.map((tr) => <li key={tr.id} className="p-3"><span className="mr-2 text-muted tabular-nums">{tr.track_number}.</span>{tr.title}<span className="ml-2 text-xs text-muted">{tr.audio_path ? t.studio.upload.attached : t.studio.upload.missing}</span>{draft && <AudioUpload trackId={tr.id} hasAudio={Boolean(tr.audio_path)} labels={t.studio.upload} />}</li>)}</ol> : <p className="text-muted">{t.studio.noTracks}</p>}
         <p className="alert alert-warning mt-3 text-sm">{t.studio.audioNote}</p>
         {draft && (
           <form action={addTrack} className="card mt-3 flex flex-wrap items-end gap-3 p-4">

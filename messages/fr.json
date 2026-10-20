@@ -110,7 +110,7 @@
     "trackTitle": "Titre du morceau",
     "trackNumber": "N°",
     "noTracks": "Aucun titre pour le moment.",
-    "audioNote": "Le téléversement audio n'est pas encore disponible. Il sera activé quand le stockage audio sera connecté. Une sortie ne peut pas être lue tant qu'aucun audio n'est associé.",
+    "audioNote": "Ne téléversez que de l'audio dont vous détenez les droits ou une licence. Une sortie ne peut pas être lue tant qu'aucun audio n'est associé à ses titres.",
     "rightsTitle": "Déclaration de droits",
     "submit": "Soumettre pour examen",
     "submitted": "Soumis. Un administrateur examinera cette sortie.",
@@ -118,7 +118,24 @@
     "errorRights": "Vous devez accepter la déclaration de droits.",
     "errorNoTracks": "Ajoutez d'abord au moins un titre.",
     "monetization": "À propos des revenus : Emerg Music est gratuit à l'écoute au lancement. Nous ne promettons aucun paiement par écoute. Une politique transparente de partage des revenus sera publiée avant tout paiement, avec des registres vérifiables et des contrôles anti-fraude.",
-    "removedReason": "Retirée car"
+    "removedReason": "Retirée car",
+    "upload": {
+      "choose": "Téléverser l'audio",
+      "replace": "Remplacer l'audio",
+      "uploading": "Téléversement…",
+      "done": "Audio téléversé.",
+      "attached": "Audio associé",
+      "missing": "Pas encore d'audio",
+      "errors": {
+        "type": "Utilisez MP3, M4A, AAC, WAV, FLAC ou OGG.",
+        "size": "Fichier trop volumineux (max 100 Mo).",
+        "config": "Le stockage audio n'est pas encore configuré.",
+        "auth": "Vous ne pouvez pas téléverser sur ce titre.",
+        "notfound": "Titre introuvable ou plus en brouillon.",
+        "failed": "Échec du téléversement. Réessayez."
+      }
+    },
+    "errorNoAudio": "Chaque titre doit avoir de l'audio avant l'envoi."
   },
   "admin": {
     "title": "Administration",

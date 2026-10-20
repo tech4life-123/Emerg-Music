@@ -110,7 +110,7 @@
     "trackTitle": "Track title",
     "trackNumber": "No.",
     "noTracks": "No tracks yet.",
-    "audioNote": "Audio upload is not available yet. It turns on when audio storage is connected. A release cannot be played until audio is attached.",
+    "audioNote": "Upload only audio you own or are licensed to release. A release cannot be played until audio is attached to its tracks.",
     "rightsTitle": "Rights declaration",
     "submit": "Submit for review",
     "submitted": "Submitted. An admin will review this release.",
@@ -118,7 +118,24 @@
     "errorRights": "You must accept the rights declaration.",
     "errorNoTracks": "Add at least one track first.",
     "monetization": "About earnings: Emerg Music is free to stream at launch. We do not promise any payment per stream. A transparent revenue-sharing policy will be published before any payouts begin, with auditable records and fraud checks.",
-    "removedReason": "Removed because"
+    "removedReason": "Removed because",
+    "upload": {
+      "choose": "Upload audio",
+      "replace": "Replace audio",
+      "uploading": "Uploading…",
+      "done": "Audio uploaded.",
+      "attached": "Audio attached",
+      "missing": "No audio yet",
+      "errors": {
+        "type": "Use MP3, M4A, AAC, WAV, FLAC or OGG.",
+        "size": "File is too large (max 100 MB).",
+        "config": "Audio storage is not configured yet.",
+        "auth": "You can't upload to this track.",
+        "notfound": "Track not found or no longer a draft.",
+        "failed": "Upload failed. Please try again."
+      }
+    },
+    "errorNoAudio": "Every track needs audio before you can submit."
   },
   "admin": {
     "title": "Admin",

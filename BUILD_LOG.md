@@ -23,3 +23,11 @@
 - Migration 0003: least-privilege grants (anon can read only the public catalog; no truncate/delete rights anywhere).
 - Checks: `tsc` and `next build` pass; catalog visibility rules and grants tested in the database. NOT tested: playback in a browser (no audio storage yet), favorites/playlists UI, the app against live data from this workspace (it cannot reach Supabase).
 - Audio storage decision: Cloudflare R2 (free egress, 10 GB free; docs checked 2026-10-20) over Supabase Storage (free plan: 1 GB storage, 5 GB egress, 50 MB files).
+
+## Milestone 4 — Phase 4: Artist Studio and administration (2026-10-20)
+- **Artist Studio** (`/studio`): apply as artist (with consent), see application status/reason, create releases, add track metadata, rights declaration (versioned, EN/FR text, stored with user and time), submit for review, real play count (no estimates), monetization explainer ("no payment per stream promised").
+- **Admin** (`/admin`, admin role checked on the server and in the database): approve/reject applications (reason required), publish/remove releases (reason required to remove), handle copyright reports, audit log of admin actions.
+- **Public** `/report`: anyone can file a copyright report; linked in the footer.
+- **Audio upload is NOT built**: it needs audio storage credentials. The UI says so; no fake upload.
+- Checks: `tsc` and `next build` pass. Workflow tested in the database (rolled back): consent required; artist cannot approve themselves, self-publish, or submit without a rights declaration; admin approve/publish writes audit rows; removal needs a reason.
+- **OPEN SECURITY ISSUE**: test showed an artist can attach a track to another artist's release. Fix is `supabase/migrations/0004_tracks_match_release_artist.sql` (NOT applied; the Supabase tool asked for confirmation). Apply it before real artists use the Studio.

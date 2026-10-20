@@ -4,6 +4,7 @@ import { getLocale, getMessages } from "@/lib/i18n";
 import { PlayerProvider } from "@/components/player/player-provider";
 import { PlayerBar } from "@/components/player/player-bar";
 import { SiteHeader } from "@/components/site-header";
+import Link from "next/link";
 import "./globals.css";
 
 // Self-hosted (no third-party request, smaller risk on slow networks)
@@ -30,7 +31,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body style={{ ["--font-heading" as string]: "var(--font-heading-loaded), ui-sans-serif, system-ui", ["--font-body" as string]: "var(--font-body-loaded), ui-sans-serif, system-ui" }}>
         <PlayerProvider>
           <SiteHeader />
-          <main className="mx-auto w-full max-w-5xl px-4 py-10 pb-40 sm:px-6">{children}</main>
+          <main className="mx-auto w-full max-w-5xl px-4 py-10 pb-10 sm:px-6">{children}</main>
+          <footer className="mx-auto max-w-5xl px-4 pb-32 text-sm text-muted sm:px-6"><Link className="underline" href="/report">{t.report.title}</Link></footer>
           <PlayerBar labels={t.player} />
         </PlayerProvider>
       </body>

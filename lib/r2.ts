@@ -16,6 +16,9 @@ export async function presignAudioPut(key: string, contentType: string, size: nu
   if (!r2Configured) throw new Error("R2 not configured");
   const client = new S3Client({
     region: "auto",
+    // R2 rejects the SDK's default CRC32 checksum params on browser PUTs; only add checksums when required.
+    requestChecksumCalculation: "WHEN_REQUIRED",
+    responseChecksumValidation: "WHEN_REQUIRED",
     endpoint: `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
     credentials: { accessKeyId: R2_ACCESS_KEY_ID!, secretAccessKey: R2_SECRET_ACCESS_KEY! },
   });

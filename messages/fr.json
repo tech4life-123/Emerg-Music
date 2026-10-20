@@ -132,7 +132,10 @@
         "config": "Le stockage audio n'est pas encore configuré.",
         "auth": "Vous ne pouvez pas téléverser sur ce titre.",
         "notfound": "Titre introuvable ou plus en brouillon.",
-        "failed": "Échec du téléversement. Réessayez."
+        "failed": "Échec du téléversement. Réessayez.",
+        "denied": "Le stockage a refusé le fichier. Vérifiez le jeton R2 (lecture/écriture sur emerg-audio).",
+        "network": "Le navigateur n'a pas pu joindre le stockage. Vérifiez la politique CORS de R2.",
+        "save": "Fichier téléversé mais non enregistré sur le titre. Réessayez."
       }
     },
     "errorNoAudio": "Chaque titre doit avoir de l'audio avant l'envoi."

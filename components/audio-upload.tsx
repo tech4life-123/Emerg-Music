@@ -16,10 +16,10 @@ export function AudioUpload({ trackId, hasAudio, labels }: { trackId: string; ha
     if (!signed.ok) return setState(signed.error);
     try {
       const put = await fetch(signed.url, { method: "PUT", body: file, headers: { "Content-Type": file.type } });
-      if (!put.ok) return setState("failed");
-    } catch { return setState("failed"); }
+      if (!put.ok) return setState(put.status === 403 ? "denied" : "failed");
+    } catch { return setState("network"); }
     const res = await confirmAudioUpload(trackId, signed.key);
-    if (!res.ok) return setState("failed");
+    if (!res.ok) return setState("save");
     setState("done");
     router.refresh();
   }

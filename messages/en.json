@@ -132,7 +132,10 @@
         "config": "Audio storage is not configured yet.",
         "auth": "You can't upload to this track.",
         "notfound": "Track not found or no longer a draft.",
-        "failed": "Upload failed. Please try again."
+        "failed": "Upload failed. Please try again.",
+        "denied": "Storage refused the file. Check the R2 token (needs Object Read & Write on emerg-audio).",
+        "network": "Browser was blocked from reaching storage. Check the R2 CORS policy.",
+        "save": "File uploaded but could not be saved to the track. Try again."
       }
     },
     "errorNoAudio": "Every track needs audio before you can submit."

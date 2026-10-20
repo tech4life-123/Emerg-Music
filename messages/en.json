@@ -1,22 +1,72 @@
 {
-  "brand": { "tagline": "Discover. Stream. Share." },
-  "nav": { "home": "Home", "signIn": "Sign in", "signUp": "Create account", "signOut": "Sign out", "profile": "Profile" },
+  "brand": {
+    "tagline": "Discover. Stream. Share."
+  },
+  "nav": {
+    "home": "Home",
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "signOut": "Sign out",
+    "profile": "Profile"
+  },
   "home": {
     "title": "Music from Liberia and Africa, in one place.",
     "body": "Emerg Music is being built in the open. Accounts and profiles work today. The catalog, player and Artist Studio arrive in the next phases.",
     "status": "Status: foundation phase. Streaming is not live yet."
   },
   "auth": {
-    "email": "Email", "password": "Password", "displayName": "Display name",
-    "signInTitle": "Sign in", "signUpTitle": "Create your account",
-    "signInAction": "Sign in", "signUpAction": "Create account",
-    "noAccount": "New here?", "haveAccount": "Already have an account?",
+    "email": "Email",
+    "password": "Password",
+    "displayName": "Display name",
+    "signInTitle": "Sign in",
+    "signUpTitle": "Create your account",
+    "signInAction": "Sign in",
+    "signUpAction": "Create account",
+    "noAccount": "New here?",
+    "haveAccount": "Already have an account?",
     "checkEmail": "Check your email to confirm your account, then sign in.",
     "passwordHint": "At least 8 characters.",
     "error": "Something went wrong. Check your details and try again."
   },
   "profile": {
-    "title": "Your profile", "language": "Language", "save": "Save changes", "saved": "Profile saved.",
-    "role": "Account type", "roles": { "listener": "Listener", "artist": "Artist", "admin": "Admin" }
+    "title": "Your profile",
+    "language": "Language",
+    "save": "Save changes",
+    "saved": "Profile saved.",
+    "role": "Account type",
+    "roles": {
+      "listener": "Listener",
+      "artist": "Artist",
+      "admin": "Admin"
+    }
+  },
+  "player": {
+    "play": "Play",
+    "pause": "Pause",
+    "next": "Next track",
+    "previous": "Previous track",
+    "volume": "Volume",
+    "seek": "Seek",
+    "unavailable": "This track has no audio available yet.",
+    "failed": "Playback failed. Check your connection and try again.",
+    "nowPlaying": "Now playing"
+  },
+  "catalog": {
+    "latest": "Latest releases",
+    "emptyTitle": "No music published yet",
+    "emptyBody": "Releases appear here after an approved artist publishes them and an admin approves them. Nothing here is placeholder content.",
+    "search": "Search",
+    "searchPlaceholder": "Search tracks and artists",
+    "tracks": "Tracks",
+    "artists": "Artists",
+    "noResults": "No results for",
+    "by": "by",
+    "share": "Share",
+    "shareWhatsApp": "Share on WhatsApp",
+    "shareFacebook": "Share on Facebook",
+    "copyLink": "Copy link",
+    "copied": "Link copied",
+    "artistNoTracks": "No published tracks yet.",
+    "report": "Report a copyright issue"
   }
 }

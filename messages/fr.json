@@ -1,22 +1,72 @@
 {
-  "brand": { "tagline": "Découvrir. Écouter. Partager." },
-  "nav": { "home": "Accueil", "signIn": "Se connecter", "signUp": "Créer un compte", "signOut": "Se déconnecter", "profile": "Profil" },
+  "brand": {
+    "tagline": "Découvrir. Écouter. Partager."
+  },
+  "nav": {
+    "home": "Accueil",
+    "signIn": "Se connecter",
+    "signUp": "Créer un compte",
+    "signOut": "Se déconnecter",
+    "profile": "Profil"
+  },
   "home": {
     "title": "La musique du Liberia et d'Afrique, au même endroit.",
     "body": "Emerg Music se construit étape par étape. Les comptes et les profils fonctionnent déjà. Le catalogue, le lecteur et le Studio Artiste arrivent dans les prochaines phases.",
     "status": "État : phase de fondation. L'écoute en continu n'est pas encore disponible."
   },
   "auth": {
-    "email": "E-mail", "password": "Mot de passe", "displayName": "Nom affiché",
-    "signInTitle": "Se connecter", "signUpTitle": "Créez votre compte",
-    "signInAction": "Se connecter", "signUpAction": "Créer un compte",
-    "noAccount": "Nouveau ici ?", "haveAccount": "Vous avez déjà un compte ?",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "displayName": "Nom affiché",
+    "signInTitle": "Se connecter",
+    "signUpTitle": "Créez votre compte",
+    "signInAction": "Se connecter",
+    "signUpAction": "Créer un compte",
+    "noAccount": "Nouveau ici ?",
+    "haveAccount": "Vous avez déjà un compte ?",
     "checkEmail": "Vérifiez votre e-mail pour confirmer votre compte, puis connectez-vous.",
     "passwordHint": "Au moins 8 caractères.",
     "error": "Une erreur s'est produite. Vérifiez vos informations et réessayez."
   },
   "profile": {
-    "title": "Votre profil", "language": "Langue", "save": "Enregistrer", "saved": "Profil enregistré.",
-    "role": "Type de compte", "roles": { "listener": "Auditeur", "artist": "Artiste", "admin": "Administrateur" }
+    "title": "Votre profil",
+    "language": "Langue",
+    "save": "Enregistrer",
+    "saved": "Profil enregistré.",
+    "role": "Type de compte",
+    "roles": {
+      "listener": "Auditeur",
+      "artist": "Artiste",
+      "admin": "Administrateur"
+    }
+  },
+  "player": {
+    "play": "Lecture",
+    "pause": "Pause",
+    "next": "Piste suivante",
+    "previous": "Piste précédente",
+    "volume": "Volume",
+    "seek": "Position",
+    "unavailable": "Cette piste n'a pas encore d'audio disponible.",
+    "failed": "Échec de la lecture. Vérifiez votre connexion et réessayez.",
+    "nowPlaying": "En cours de lecture"
+  },
+  "catalog": {
+    "latest": "Dernières sorties",
+    "emptyTitle": "Aucune musique publiée pour le moment",
+    "emptyBody": "Les sorties apparaissent ici après leur publication par un artiste approuvé et la validation d'un administrateur. Aucun contenu n'est fictif.",
+    "search": "Rechercher",
+    "searchPlaceholder": "Rechercher des titres et des artistes",
+    "tracks": "Titres",
+    "artists": "Artistes",
+    "noResults": "Aucun résultat pour",
+    "by": "par",
+    "share": "Partager",
+    "shareWhatsApp": "Partager sur WhatsApp",
+    "shareFacebook": "Partager sur Facebook",
+    "copyLink": "Copier le lien",
+    "copied": "Lien copié",
+    "artistNoTracks": "Aucun titre publié pour le moment.",
+    "report": "Signaler un problème de droits d'auteur"
   }
 }

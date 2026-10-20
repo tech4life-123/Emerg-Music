@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import { getLocale } from "@/lib/i18n";
+import { getLocale, getMessages } from "@/lib/i18n";
+import { PlayerProvider } from "@/components/player/player-provider";
+import { PlayerBar } from "@/components/player/player-bar";
 import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
@@ -22,11 +24,15 @@ export const viewport: Viewport = { themeColor: "#130f18" };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const locale = await getLocale();
+  const { t } = await getMessages();
   return (
     <html lang={locale} className={`${heading.variable} ${body.variable}`}>
       <body style={{ ["--font-heading" as string]: "var(--font-heading-loaded), ui-sans-serif, system-ui", ["--font-body" as string]: "var(--font-body-loaded), ui-sans-serif, system-ui" }}>
-        <SiteHeader />
-        <main className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6">{children}</main>
+        <PlayerProvider>
+          <SiteHeader />
+          <main className="mx-auto w-full max-w-5xl px-4 py-10 pb-40 sm:px-6">{children}</main>
+          <PlayerBar labels={t.player} />
+        </PlayerProvider>
       </body>
     </html>
   );

@@ -15,3 +15,11 @@
 - **Checks run**: `tsc` clean; `next build` passes; routes return 200, `/profile` redirects to sign-in when logged out; access tests against the live database (rolled-back transactions) behaved as intended; Supabase security advisor re-checked after lockdown.
 - **First admin**: sign up in the app, then run in the Supabase SQL editor: `update public.profiles set role='admin' where id = (select id from auth.users where email = 'YOUR_EMAIL');`
 - Not done: Vercel environment variables, email confirmation settings, catalog/player (Phase 3), audio storage choice.
+
+## Milestone 3 — Phase 3a: listening experience (2026-10-20)
+- Catalog reads (RLS-filtered to published music), search (tracks + artists), track and artist pages with WhatsApp/Facebook/copy-link sharing and Open Graph tags, empty states, English/French strings.
+- Persistent player (one `<audio>` element in the root layout, so playback continues across navigation): play/pause, seek, next/previous, volume, queue, Media Session (lock-screen controls), reduced-motion aware. A play is recorded after 30 s for signed-in users.
+- `lib/storage.ts` resolves media from `NEXT_PUBLIC_MEDIA_BASE_URL`. Until it is set, tracks show "no audio available yet" instead of pretending to play.
+- Migration 0003: least-privilege grants (anon can read only the public catalog; no truncate/delete rights anywhere).
+- Checks: `tsc` and `next build` pass; catalog visibility rules and grants tested in the database. NOT tested: playback in a browser (no audio storage yet), favorites/playlists UI, the app against live data from this workspace (it cannot reach Supabase).
+- Audio storage decision: Cloudflare R2 (free egress, 10 GB free; docs checked 2026-10-20) over Supabase Storage (free plan: 1 GB storage, 5 GB egress, 50 MB files).

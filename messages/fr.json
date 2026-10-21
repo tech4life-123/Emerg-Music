@@ -7,12 +7,22 @@
     "signIn": "Se connecter",
     "signUp": "Créer un compte",
     "signOut": "Se déconnecter",
-    "profile": "Profil"
+    "profile": "Profil",
+    "search": "Recherche",
+    "library": "Bibliothèque"
   },
   "home": {
     "title": "La musique du Liberia et d'Afrique, au même endroit.",
     "body": "Emerg Music se construit étape par étape. Les comptes et les profils fonctionnent déjà. Le catalogue, le lecteur et le Studio Artiste arrivent dans les prochaines phases.",
-    "status": "État : phase de fondation. L'écoute en continu n'est pas encore disponible."
+    "status": "État : phase de fondation. L'écoute en continu n'est pas encore disponible.",
+    "greeting": "Bienvenue",
+    "greetingName": "Bonjour, {name}",
+    "sub": "La musique du Liberia et d'Afrique, prête à jouer.",
+    "newReleases": "Nouvelles sorties",
+    "browseGenres": "Parcourir par genre",
+    "artists": "Artistes",
+    "latestTracks": "Derniers titres",
+    "seeAll": "Tout voir"
   },
   "auth": {
     "email": "E-mail",
@@ -136,9 +146,21 @@
         "denied": "Le stockage a refusé le fichier. Vérifiez le jeton R2 (lecture/écriture sur emerg-audio).",
         "network": "Le navigateur n'a pas pu joindre le stockage. Vérifiez la politique CORS de R2.",
         "save": "Fichier téléversé mais non enregistré sur le titre. Réessayez."
-      }
+      },
+      "imageTypeError": "Utilisez une image JPG, PNG ou WebP."
     },
-    "errorNoAudio": "Chaque titre doit avoir de l'audio avant l'envoi."
+    "errorNoAudio": "Chaque titre doit avoir de l'audio avant l'envoi.",
+    "genre": "Genre (obligatoire)",
+    "secondaryGenre": "Second genre (facultatif)",
+    "chooseGenre": "Choisissez un genre",
+    "none": "Aucun",
+    "errorGenre": "Choisissez un genre pour le titre.",
+    "coverTitle": "Pochette",
+    "coverHint": "JPG, PNG ou WebP carré, au moins 1000 × 1000 px, 5 Mo maximum. Elle apparaît sur votre sortie et dans les liens partagés.",
+    "photoTitle": "Photo de l'artiste",
+    "photoHint": "JPG, PNG ou WebP, 5 Mo maximum. Elle apparaît sur votre page d'artiste et dans les liens partagés.",
+    "noCover": "Pas encore de pochette",
+    "hasCover": "Pochette ajoutée"
   },
   "admin": {
     "title": "Administration",
@@ -169,5 +191,38 @@
     "description": "Quel est le problème ?",
     "send": "Envoyer le signalement",
     "sent": "Signalement reçu. Merci."
+  },
+  "genres": {
+    "title": "Recherche",
+    "browseAll": "Tous les genres",
+    "noTracks": "Aucun titre dans ce genre pour le moment.",
+    "genre": "Genre",
+    "category": "Catégorie"
+  },
+  "release": {
+    "album": "Album",
+    "ep": "EP",
+    "single": "Single",
+    "play": "Lire",
+    "rights": "Droits déclarés par l'artiste.",
+    "tracksCount": "titres",
+    "discography": "Discographie",
+    "latestFromArtist": "Derniers titres",
+    "about": "À propos de ce titre",
+    "released": "Sortie",
+    "genre": "Genre",
+    "rightsLabel": "Droits",
+    "rightsValue": "Déclarés par l'artiste",
+    "from": "Extrait de",
+    "verified": "Artiste sur Emerg Music",
+    "noBio": ""
+  },
+  "guest": {
+    "title": "Vous aimez Emerg Music ?",
+    "body": "Créez un compte gratuit ou connectez-vous pour continuer à écouter. Cela prend moins d'une minute.",
+    "create": "Créer un compte gratuit",
+    "signIn": "Se connecter",
+    "counter": "{used} sur {limit} écoutes gratuites",
+    "close": "Plus tard"
   }
 }

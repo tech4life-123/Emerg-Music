@@ -39,3 +39,12 @@
 - Migration 0005 (NOT applied): audio_path must be under audio/<artist>/<track>/.
 - Needs: R2 CORS (PUT/GET/HEAD), R2_* env vars in Vercel, 0004 + 0005 run in Supabase.
 - Not tested end-to-end: sandbox cannot reach R2/Supabase.
+
+## Milestone 6 — Genres, new pages, guest limit, link previews
+- Migration 0006 applied: genre_categories (7), genres (25), tracks.genre_id (required for new/changed tracks), secondary genre, cover/artist-photo folder checks.
+- Studio: genre picker (grouped by category), cover art upload, artist photo upload (signed uploads, 5 MB images).
+- Pages: Home (signed-in greeting, new releases, genres, artists, latest tracks), Search + genre grid, /genre/[slug], /release/[id], artist and track redesign, mobile bottom nav.
+- Studio/Admin links only for artists/admins; listeners get "Apply as an artist" in Profile.
+- Guest limit: 5 plays (30 s each) counted in a cookie; sign-up/sign-in sheet after that. Cookie-based, so clearing cookies resets it.
+- Link previews: Open Graph/Twitter metadata; cover or artist photo resized to 640 px via Next image; branded fallback card at /opengraph-image.
+- Open: track "Fake Life" (Ivyson) predates genres and has none; editing it needs a genre (SQL provided to owner).

@@ -36,7 +36,14 @@ export async function addTrack(fd: FormData) {
   const { data: release } = await supabase.from("releases").select("id, artist_id, status").eq("id", releaseId).single();
   if (!release || release.status !== "draft") redirect(`/studio/releases/${releaseId}?error=1`);
   const number = Math.max(1, Math.min(99, Number(fd.get("trackNumber")) || 1));
-  const { error } = await supabase.from("tracks").insert({ release_id: release.id, artist_id: release.artist_id, title: text(fd, "title", 120), track_number: number });
+  const uuid = /^[0-9a-f-]{36}$/i;
+  const genreId = text(fd, "genreId", 40);
+  const secondary = text(fd, "secondaryGenreId", 40);
+  if (!uuid.test(genreId)) redirect(`/studio/releases/${releaseId}?error=genre`);
+  const { error } = await supabase.from("tracks").insert({
+    release_id: release.id, artist_id: release.artist_id, title: text(fd, "title", 120), track_number: number,
+    genre_id: genreId, secondary_genre_id: uuid.test(secondary) && secondary !== genreId ? secondary : null,
+  });
   revalidatePath(`/studio/releases/${releaseId}`);
   redirect(`/studio/releases/${releaseId}${error ? "?error=1" : ""}`);
 }

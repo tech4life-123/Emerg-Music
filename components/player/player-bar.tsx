@@ -5,7 +5,7 @@ import { usePlayer } from "./player-provider";
 
 const fmt = (s: number) => (Number.isFinite(s) ? `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}` : "0:00");
 
-export function PlayerBar({ labels }: { labels: Record<"play" | "pause" | "next" | "previous" | "volume" | "seek" | "unavailable" | "failed" | "nowPlaying", string> }) {
+export function PlayerBar({ labels, guestCounter }: { labels: Record<"play" | "pause" | "next" | "previous" | "volume" | "seek" | "unavailable" | "failed" | "nowPlaying", string>; guestCounter: string }) {
   const p = usePlayer();
   return (
     <MotionConfig reducedMotion="user">
@@ -13,7 +13,7 @@ export function PlayerBar({ labels }: { labels: Record<"play" | "pause" | "next"
         {p.current && (
           <motion.section aria-label={labels.nowPlaying} initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 80, opacity: 0 }}
             transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-surface/95 backdrop-blur">
+            className="fixed inset-x-0 bottom-16 z-50 md:bottom-0 border-t border-border bg-surface/95 backdrop-blur">
             <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3 sm:px-6">
               <div className="min-w-0 flex-1 basis-40">
                 <p className="truncate text-sm font-semibold">{p.current.title}</p>
@@ -32,6 +32,7 @@ export function PlayerBar({ labels }: { labels: Record<"play" | "pause" | "next"
               <label className="hidden items-center gap-2 text-muted sm:flex"><Volume2 size={16} aria-hidden />
                 <input type="range" className="w-20 accent-violet" aria-label={labels.volume} min={0} max={1} step={0.05} value={p.volume} onChange={(e) => p.setVolume(Number(e.target.value))} />
               </label>
+              {p.guest && <p className="basis-full text-xs text-[var(--warning)]">{guestCounter.replace("{used}", String(p.guest.used)).replace("{limit}", String(p.guest.limit))}</p>}
               {p.error && <p role="alert" className="basis-full text-xs text-[var(--danger)]">{p.error === "unavailable" ? labels.unavailable : labels.failed}</p>}
             </div>
           </motion.section>

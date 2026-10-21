@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ProfileForm } from "@/components/profile-form";
 import { getMessages } from "@/lib/i18n";
@@ -20,6 +21,10 @@ export default async function ProfilePage() {
         locale={locale}
         labels={{ ...t.profile, displayName: t.auth.displayName, error: t.auth.error }}
       />
+      {(profile?.role ?? "listener") === "listener" && (
+        <p className="text-sm text-muted"><Link href="/studio/apply" className="text-lilac underline">{t.studio.applyCta}</Link></p>
+      )}
+      <form action="/auth/signout" method="post"><button className="btn btn-secondary" type="submit">{t.nav.signOut}</button></form>
     </div>
   );
 }

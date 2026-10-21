@@ -7,12 +7,22 @@
     "signIn": "Sign in",
     "signUp": "Create account",
     "signOut": "Sign out",
-    "profile": "Profile"
+    "profile": "Profile",
+    "search": "Search",
+    "library": "Library"
   },
   "home": {
     "title": "Music from Liberia and Africa, in one place.",
     "body": "Emerg Music is being built in the open. Accounts and profiles work today. The catalog, player and Artist Studio arrive in the next phases.",
-    "status": "Status: foundation phase. Streaming is not live yet."
+    "status": "Status: foundation phase. Streaming is not live yet.",
+    "greeting": "Welcome",
+    "greetingName": "Hello, {name}",
+    "sub": "Music from Liberia and Africa, ready to play.",
+    "newReleases": "New releases",
+    "browseGenres": "Browse by genre",
+    "artists": "Artists",
+    "latestTracks": "Latest tracks",
+    "seeAll": "See all"
   },
   "auth": {
     "email": "Email",
@@ -136,9 +146,21 @@
         "denied": "Storage refused the file. Check the R2 token (needs Object Read & Write on emerg-audio).",
         "network": "Browser was blocked from reaching storage. Check the R2 CORS policy.",
         "save": "File uploaded but could not be saved to the track. Try again."
-      }
+      },
+      "imageTypeError": "Use a JPG, PNG or WebP image."
     },
-    "errorNoAudio": "Every track needs audio before you can submit."
+    "errorNoAudio": "Every track needs audio before you can submit.",
+    "genre": "Genre (required)",
+    "secondaryGenre": "Second genre (optional)",
+    "chooseGenre": "Choose a genre",
+    "none": "None",
+    "errorGenre": "Choose a genre for the track.",
+    "coverTitle": "Cover art",
+    "coverHint": "Square JPG, PNG or WebP, at least 1000 × 1000 px, up to 5 MB. It appears on your release and in shared links.",
+    "photoTitle": "Artist photo",
+    "photoHint": "JPG, PNG or WebP up to 5 MB. It appears on your artist page and in shared links.",
+    "noCover": "No cover yet",
+    "hasCover": "Cover added"
   },
   "admin": {
     "title": "Admin",
@@ -169,5 +191,38 @@
     "description": "What is the problem?",
     "send": "Send report",
     "sent": "Report received. Thank you."
+  },
+  "genres": {
+    "title": "Search",
+    "browseAll": "Browse all genres",
+    "noTracks": "No tracks in this genre yet.",
+    "genre": "Genre",
+    "category": "Category"
+  },
+  "release": {
+    "album": "Album",
+    "ep": "EP",
+    "single": "Single",
+    "play": "Play",
+    "rights": "Rights declared by the artist.",
+    "tracksCount": "tracks",
+    "discography": "Discography",
+    "latestFromArtist": "Latest tracks",
+    "about": "About this track",
+    "released": "Released",
+    "genre": "Genre",
+    "rightsLabel": "Rights",
+    "rightsValue": "Declared by the artist",
+    "from": "From",
+    "verified": "Artist on Emerg Music",
+    "noBio": ""
+  },
+  "guest": {
+    "title": "Enjoying Emerg Music?",
+    "body": "Create a free account or sign in to keep listening. It takes less than a minute.",
+    "create": "Create free account",
+    "signIn": "Sign in",
+    "counter": "{used} of {limit} free plays",
+    "close": "Not now"
   }
 }

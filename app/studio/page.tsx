@@ -2,6 +2,9 @@ import Link from "next/link";
 import { getMessages } from "@/lib/i18n";
 import { requireUser } from "@/lib/auth";
 import { createRelease } from "./actions";
+import { Cover } from "@/components/cover";
+import { MediaUpload } from "@/components/media-upload";
+import { mediaUrl } from "@/lib/storage";
 
 export const metadata = { title: "Artist Studio" };
 
@@ -9,7 +12,7 @@ export default async function StudioPage({ searchParams }: { searchParams: Promi
   const { t } = await getMessages();
   const { supabase, user } = await requireUser("/studio");
   const sp = await searchParams;
-  const { data: artist } = await supabase.from("artists").select("id, name, slug").eq("owner_id", user.id).maybeSingle();
+  const { data: artist } = await supabase.from("artists").select("id, name, slug, image_url").eq("owner_id", user.id).maybeSingle();
 
   if (!artist) {
     const { data: apps } = await supabase.from("artist_applications").select("status, decision_reason, artist_name, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1);
@@ -39,6 +42,11 @@ export default async function StudioPage({ searchParams }: { searchParams: Promi
     <div className="flex flex-col gap-8">
       <div><h1 className="text-3xl font-bold">{t.studio.title}</h1><p className="mt-1 text-muted">{artist.name}</p></div>
       <p className="alert alert-warning max-w-3xl text-sm">{t.studio.monetization}</p>
+      <section className="card flex max-w-xl flex-wrap items-center gap-4 p-4">
+        <Cover url={mediaUrl(artist.image_url)} seed={artist.name} round className="h-20 w-20" />
+        <div className="min-w-0 flex-1"><h2 className="text-lg font-bold">{t.studio.photoTitle}</h2><p className="text-sm text-muted">{t.studio.photoHint}</p>
+          <MediaUpload kind="artist" targetId={artist.id} hasFile={Boolean(artist.image_url)} labels={{ ...t.studio.upload, errors: { ...t.studio.upload.errors, type: t.studio.upload.imageTypeError } }} /></div>
+      </section>
       <section className="card max-w-sm p-5">
         <p className="text-sm text-muted">{t.studio.plays}</p>
         <p className="text-3xl font-bold tabular-nums">{plays ?? 0}</p>

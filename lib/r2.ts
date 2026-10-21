@@ -11,6 +11,8 @@ export const AUDIO_TYPES: Record<string, string> = {
   "audio/mpeg": "mp3", "audio/mp4": "m4a", "audio/aac": "aac", "audio/wav": "wav", "audio/x-wav": "wav", "audio/flac": "flac", "audio/ogg": "ogg",
 };
 export const MAX_AUDIO_BYTES = 100 * 1024 * 1024;
+export const IMAGE_TYPES: Record<string, string> = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" };
+export const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
 export async function presignAudioPut(key: string, contentType: string, size: number) {
   if (!r2Configured) throw new Error("R2 not configured");

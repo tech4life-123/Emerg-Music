@@ -15,12 +15,13 @@ export async function SiteHeader() {
           <Image src="/brand/logo-horizontal.svg" alt="Emerg Music" width={190} height={32} priority className="h-8 w-auto max-w-none" />
         </Link>
         <div className="flex flex-wrap items-center gap-2">
+          <Link className="btn btn-secondary hidden items-center md:inline-flex" href="/search">{t.nav.search}</Link>
           {user ? (
             <>
               {role === "admin" && <Link className="btn btn-secondary inline-flex items-center" href="/admin">{t.admin.title}</Link>}
-              <Link className="btn btn-secondary inline-flex items-center" href="/studio">{t.studio.title}</Link>
-              <Link className="btn btn-secondary inline-flex items-center" href="/profile">{t.nav.profile}</Link>
-              <form action="/auth/signout" method="post"><button className="btn btn-secondary" type="submit">{t.nav.signOut}</button></form>
+              {(role === "artist" || role === "admin") && <Link className="btn btn-secondary inline-flex items-center" href="/studio">{t.studio.title}</Link>}
+              <Link className="btn btn-secondary hidden items-center md:inline-flex" href="/profile">{t.nav.profile}</Link>
+              <form action="/auth/signout" method="post" className="hidden md:block"><button className="btn btn-secondary" type="submit">{t.nav.signOut}</button></form>
             </>
           ) : (
             <>

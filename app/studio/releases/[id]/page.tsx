@@ -99,7 +99,7 @@ export default async function ReleasePage({ params, searchParams }: { params: Pr
         <div className="flex flex-col gap-4">
           <ul className="flex flex-col gap-4">
             {list.map((tr, i) => (
-              <TrackEditor key={tr.id} trackId={tr.id} index={i} canRemove={list.length > 1}
+              <TrackEditor key={tr.id} trackId={tr.id} index={i} canRemove={list.length > 1} releaseTitle={release.title} isSingle={release.type === "single"}
                 initial={{ title: tr.title, explicit: tr.explicit, featured: credits(tr, "featured"), writers: credits(tr, "writer"), producers: credits(tr, "producer") }}
                 hasAudio={Boolean(tr.audio_path)} processing={tr.processing_status} t={t.studio} uploadLabels={uploadLabels} />
             ))}

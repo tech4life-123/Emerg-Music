@@ -46,6 +46,7 @@ export function ReleaseDetailsForm({ releaseId, initial, coverUrl, groups, langu
       <div className="flex flex-col gap-5">
         <label className="flex flex-col gap-1 text-sm font-medium">{w.titleLabel}
           <input className="input h-12 text-base" value={title} maxLength={120} onChange={(e) => setTitle(e.target.value)} autoComplete="off" />
+          <span className="text-xs font-normal text-muted">{w.titleHint}</span>
         </label>
 
         <fieldset className="flex flex-col gap-2">

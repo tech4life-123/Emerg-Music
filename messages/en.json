@@ -259,7 +259,10 @@
       "newRelease": "New release",
       "continueEditing": "Continue",
       "statusLine": "{type} · {status}",
-      "view": "View on Emerg Music"
+      "view": "View on Emerg Music",
+      "titleHint": "The name of this single, EP or album. For a single, use your song's title.",
+      "trackTitleHint": "The name of this song.",
+      "useReleaseTitle": "Use “{title}” as the song title"
     },
     "imageUpload": {
       "cover": {

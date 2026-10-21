@@ -66,3 +66,7 @@
 - Public playlist pages are viewable without an account, show only published songs, and carry WhatsApp/Facebook/copy-link sharing with an artwork preview (first track's cover).
 - Private playlists are not indexed. No new migration: uses existing `is_public` + RLS.
 - Not yet browser-tested while signed in; to check: make a playlist public, open the link in a private window.
+
+## Milestone 10 — Clearer release/track titles
+- Release title now explains itself (single/EP/album name; for a single use the song title).
+- Track title has a hint, and singles get a one-tap "Use release title as the song title" button.

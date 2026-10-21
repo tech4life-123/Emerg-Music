@@ -3,16 +3,16 @@ import { useState } from "react";
 import { saveTrack, removeTrack } from "@/app/studio/release-actions";
 import { useAutosave } from "./use-autosave";
 import { MediaUpload } from "@/components/media-upload";
-import { DEFAULT_TRACK_TITLE } from "@/lib/release-check";
+import { DEFAULT_RELEASE_TITLE, DEFAULT_TRACK_TITLE } from "@/lib/release-check";
 
 type Props = {
-  trackId: string; index: number; canRemove: boolean;
+  trackId: string; index: number; canRemove: boolean; releaseTitle?: string; isSingle?: boolean;
   initial: { title: string; explicit: boolean; featured: string; writers: string; producers: string };
   hasAudio: boolean; processing: string;
   t: Record<string, any>; uploadLabels: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 };
 
-export function TrackEditor({ trackId, index, canRemove, initial, hasAudio, processing, t, uploadLabels }: Props) {
+export function TrackEditor({ trackId, index, canRemove, releaseTitle, isSingle, initial, hasAudio, processing, t, uploadLabels }: Props) {
   const w = t.wizard;
   const [title, setTitle] = useState(initial.title === DEFAULT_TRACK_TITLE ? "" : initial.title);
   const [explicit, setExplicit] = useState(initial.explicit);
@@ -42,6 +42,10 @@ export function TrackEditor({ trackId, index, canRemove, initial, hasAudio, proc
 
       <label className="flex flex-col gap-1 text-sm font-medium">{w.trackTitle}
         <input className="input h-12 text-base" value={title} maxLength={120} onChange={(e) => setTitle(e.target.value)} autoComplete="off" />
+        <span className="text-xs font-normal text-muted">{w.trackTitleHint}</span>
+        {!title.trim() && isSingle && index === 0 && releaseTitle && releaseTitle !== DEFAULT_RELEASE_TITLE && (
+          <button type="button" className="min-h-11 self-start text-left text-sm font-semibold text-lilac underline" onClick={() => setTitle(releaseTitle)}>{w.useReleaseTitle.replace("{title}", releaseTitle)}</button>
+        )}
       </label>
 
       <div className="rounded-lg border border-border p-3">

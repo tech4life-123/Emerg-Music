@@ -419,7 +419,15 @@
     "explicit": "Explicit",
     "feat": "feat.",
     "failed": "That didn't work. Please try again.",
-    "signInNeeded": "Sign in to use your library."
+    "signInNeeded": "Sign in to use your library.",
+    "makePublic": "Make public",
+    "makePrivate": "Make private",
+    "publicNote": "Anyone with the link can listen. Only published songs are shown.",
+    "privateNote": "Only you can see this playlist.",
+    "publicBadge": "Public playlist",
+    "privateBadge": "Private",
+    "sharePlaylist": "Share this playlist",
+    "playlist": "Playlist"
   },
   "notifications": {
     "title": "Notifications",

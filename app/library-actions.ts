@@ -89,3 +89,13 @@ export async function createPlaylistForm(fd: FormData) {
   if (!r.ok && r.error === "auth") redirect("/login?next=/library");
   redirect(r.ok ? `/playlist/${r.id}` : "/library?tab=playlists&error=1");
 }
+
+// Owner-only: make a playlist shareable by link (public) or private again.
+export async function setPlaylistPublic(fd: FormData) {
+  const { supabase, user } = await ctx();
+  if (!user) redirect("/login");
+  const id = String(fd.get("playlistId") ?? "");
+  const makePublic = String(fd.get("public") ?? "") === "1";
+  if (UUID.test(id)) await supabase.from("playlists").update({ is_public: makePublic }).eq("id", id).eq("owner_id", user.id);
+  revalidatePath(`/playlist/${id}`);
+}

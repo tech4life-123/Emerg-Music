@@ -60,3 +60,9 @@
 - /admin/releases/[id]: listen to each track, see credits, audio versions, rights declaration; Approve and publish, Send back for changes (artist sees the note), or Remove.
 - In-app notifications (bell in header, /notifications): release published / removed / needs changes, application approved / rejected. Created only by database triggers.
 - Not yet exercised end to end with a real admin action; verify by approving a test release.
+
+## Milestone 9 — Public playlists
+- Owners can make a playlist public (shareable by link) or private again; only the owner sees edit controls.
+- Public playlist pages are viewable without an account, show only published songs, and carry WhatsApp/Facebook/copy-link sharing with an artwork preview (first track's cover).
+- Private playlists are not indexed. No new migration: uses existing `is_public` + RLS.
+- Not yet browser-tested while signed in; to check: make a playlist public, open the link in a private window.

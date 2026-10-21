@@ -6,6 +6,8 @@ import { PlayerBar } from "@/components/player/player-bar";
 import { SiteHeader } from "@/components/site-header";
 import { BottomNav } from "@/components/bottom-nav";
 import { createClient } from "@/lib/supabase/server";
+import { getLibraryState } from "@/lib/library";
+import { LibraryProvider } from "@/components/library-provider";
 import Link from "next/link";
 import "./globals.css";
 
@@ -33,16 +35,19 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const { t } = await getMessages();
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+  const library = await getLibraryState(user?.id);
   return (
     <html lang={locale} className={`${heading.variable} ${body.variable}`}>
       <body style={{ ["--font-heading" as string]: "var(--font-heading-loaded), ui-sans-serif, system-ui", ["--font-body" as string]: "var(--font-body-loaded), ui-sans-serif, system-ui" }}>
+        <LibraryProvider state={library} labels={t.library}>
         <PlayerProvider guestLabels={t.guest}>
           <SiteHeader />
           <main className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6">{children}</main>
           <footer className="mx-auto max-w-5xl px-4 pb-40 text-sm text-muted sm:px-6"><Link className="underline" href="/report">{t.report.title}</Link></footer>
           <PlayerBar labels={t.player} guestCounter={t.guest.counter} />
-          <BottomNav signedIn={Boolean(user)} labels={{ home: t.nav.home, search: t.nav.search, profile: t.nav.profile, signIn: t.nav.signIn }} />
+          <BottomNav signedIn={Boolean(user)} labels={{ home: t.nav.home, search: t.nav.search, library: t.nav.library, profile: t.nav.profile, signIn: t.nav.signIn }} />
         </PlayerProvider>
+        </LibraryProvider>
       </body>
     </html>
   );

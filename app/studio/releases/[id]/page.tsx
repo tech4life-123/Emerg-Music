@@ -1,78 +1,151 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getLocale, getMessages } from "@/lib/i18n";
 import { requireUser } from "@/lib/auth";
-import { RIGHTS_STATEMENT } from "@/lib/rights";
-import { addTrack, submitRelease } from "../../actions";
-import { MediaUpload } from "@/components/media-upload";
+import { RIGHTS_ITEMS } from "@/lib/rights";
 import { listGenres } from "@/lib/catalog";
 import { mediaUrl } from "@/lib/storage";
+import { languageLabel, languageOptions } from "@/lib/languages";
+import { MAX_TRACKS, releaseIssues, type Issue } from "@/lib/release-check";
+import { addTrackToRelease, deleteDraft } from "../../release-actions";
+import { WizardSteps } from "@/components/studio/wizard-steps";
+import { ReleaseDetailsForm } from "@/components/studio/release-details-form";
+import { TrackEditor } from "@/components/studio/track-editor";
+import { RightsForm } from "@/components/studio/rights-form";
+import { Cover } from "@/components/cover";
 
 export const metadata = { title: "Release" };
 
-export default async function ReleasePage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ error?: string; submitted?: string }> }) {
+export default async function ReleasePage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ step?: string; error?: string; submitted?: string }> }) {
   const { id } = await params;
   const sp = await searchParams;
   const { t } = await getMessages();
   const locale = await getLocale();
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
   const { supabase } = await requireUser(`/studio/releases/${id}`);
-  const { data: release } = await supabase.from("releases").select("id, title, type, status, removal_reason, cover_path").eq("id", id).maybeSingle();
-  if (!release) notFound();
-  const { data: tracks } = await supabase.from("tracks").select("id, title, track_number, audio_path, genre:genres!tracks_genre_id_fkey(name)").eq("release_id", id).order("track_number");
-  const groups = await listGenres();
-  const imgLabels = { ...t.studio.upload, errors: { ...t.studio.upload.errors, type: t.studio.upload.imageTypeError } };
+  const check = await releaseIssues(supabase, id);
+  if (!check) notFound();
+  const { release, issues } = check;
+  const w = t.studio.wizard;
   const coverUrl = mediaUrl(release.cover_path);
-  const errMsg = sp.error === "genre" ? t.studio.errorGenre :  sp.error === "rights" ? t.studio.errorRights : sp.error === "notracks" ? t.studio.errorNoTracks : sp.error === "noaudio" ? t.studio.errorNoAudio : sp.error ? t.studio.errorGeneric : null;
-  const draft = release.status === "draft";
-  return (
-    <div className="flex max-w-2xl flex-col gap-6">
-      <Link href="/studio" className="text-sm text-lilac underline">← {t.studio.title}</Link>
-      <div><h1 className="text-3xl font-bold">{release.title}</h1>
-        <p className="mt-1 text-muted">{t.studio.types[release.type as "single"]} · {t.studio.statuses[release.status as "draft"]}</p>
-        {release.status === "removed" && release.removal_reason && <p className="alert alert-danger mt-3 text-sm">{t.studio.removedReason}: {release.removal_reason}</p>}
-      </div>
-      {sp.submitted && <p role="status" className="alert alert-success text-sm">{t.studio.submitted}</p>}
-      {errMsg && <p role="alert" className="alert alert-danger text-sm">{errMsg}</p>}
-      <section className="card flex flex-wrap items-center gap-4 p-4">
-        <div className="h-24 w-24 shrink-0 overflow-hidden rounded-md bg-plum">{coverUrl && /* eslint-disable-next-line @next/next/no-img-element */ <img src={coverUrl} alt="" className="h-full w-full object-cover" />}</div>
-        <div className="min-w-0 flex-1"><h2 className="text-lg font-bold">{t.studio.coverTitle}</h2><p className="text-sm text-muted">{t.studio.coverHint}</p>
-          <MediaUpload kind="cover" targetId={release.id} hasFile={Boolean(release.cover_path)} labels={imgLabels} /></div>
-      </section>
-      <section>
-        <h2 className="mb-3 text-xl font-bold">{t.studio.tracks}</h2>
-        {tracks?.length ? <ol className="card divide-y divide-border">{tracks.map((tr) => <li key={tr.id} className="p-3"><span className="mr-2 text-muted tabular-nums">{tr.track_number}.</span>{tr.title}<span className="ml-2 text-xs text-muted">{(Array.isArray(tr.genre) ? tr.genre[0]?.name : (tr.genre as { name: string } | null)?.name) ?? ""} · {tr.audio_path ? t.studio.upload.attached : t.studio.upload.missing}</span>{draft && <MediaUpload kind="audio" targetId={tr.id} hasFile={Boolean(tr.audio_path)} labels={t.studio.upload} />}</li>)}</ol> : <p className="text-muted">{t.studio.noTracks}</p>}
-        <p className="alert alert-warning mt-3 text-sm">{t.studio.audioNote}</p>
-        {draft && (
-          <form action={addTrack} className="card mt-3 flex flex-wrap items-end gap-3 p-4">
-            <input type="hidden" name="releaseId" value={release.id} />
-            <label className="flex min-w-48 flex-1 flex-col gap-1 text-sm">{t.studio.trackTitle}<input className="input" name="title" required maxLength={120} /></label>
-            <label className="flex w-full flex-col gap-1 text-sm">{t.studio.genre}
-              <select className="input" name="genreId" required defaultValue="">
-                <option value="" disabled>{t.studio.chooseGenre}</option>
-                {groups.map((c) => <optgroup key={c.slug} label={c.name}>{c.genres.map((g) => <option key={g.slug} value={g.id}>{g.name}</option>)}</optgroup>)}
-              </select>
-            </label>
-            <label className="flex w-full flex-col gap-1 text-sm">{t.studio.secondaryGenre}
-              <select className="input" name="secondaryGenreId" defaultValue="">
-                <option value="">{t.studio.none}</option>
-                {groups.map((c) => <optgroup key={c.slug} label={c.name}>{c.genres.map((g) => <option key={g.slug} value={g.id}>{g.name}</option>)}</optgroup>)}
-              </select>
-            </label>
-            <label className="flex w-20 flex-col gap-1 text-sm">{t.studio.trackNumber}<input className="input" type="number" name="trackNumber" min={1} max={99} defaultValue={(tracks?.length ?? 0) + 1} /></label>
-            <button className="btn btn-secondary" type="submit">{t.studio.addTrack}</button>
-          </form>
+  const imageLabels = { ...t.studio.upload, errors: { ...t.studio.upload.errors, type: t.studio.upload.imageTypeError, notfound: w.issues.notfound } };
+  const uploadLabels = { ...t.studio.upload, errors: { ...t.studio.upload.errors, notfound: w.issues.notfound } };
+  const has = (...k: Issue[]) => k.some((x) => issues.includes(x));
+
+  const { data: tracks } = await supabase.from("tracks")
+    .select("id, title, track_number, audio_path, explicit, processing_status, track_credits(name, role)")
+    .eq("release_id", id).order("track_number");
+  const list = tracks ?? [];
+
+  // ---- Not a draft any more: read-only status page ----
+  if (release.status !== "draft") {
+    return (
+      <div className="flex max-w-2xl flex-col gap-6">
+        <Link href="/studio" className="text-sm text-lilac underline">← {t.studio.title}</Link>
+        {sp.submitted && (
+          <div role="status" className="alert alert-success"><p className="font-semibold">{w.submittedTitle}</p><p className="text-sm">{w.submittedBody}</p></div>
         )}
-      </section>
-      {draft && (
-        <section>
-          <h2 className="mb-3 text-xl font-bold">{t.studio.rightsTitle}</h2>
-          <form action={submitRelease} className="card flex flex-col gap-4 p-5">
-            <input type="hidden" name="releaseId" value={release.id} />
-            <label className="flex items-start gap-2 text-sm"><input type="checkbox" name="accept" required className="mt-1 accent-violet" />{RIGHTS_STATEMENT[locale]}</label>
-            <button className="btn btn-primary" type="submit">{t.studio.submit}</button>
-          </form>
-        </section>
+        <div className="flex items-center gap-4">
+          <Cover url={coverUrl} seed={release.title} className="h-24 w-24" />
+          <div>
+            <h1 className="text-3xl font-bold">{release.title}</h1>
+            <p className="text-muted">{t.studio.types[release.type as "single"]} · {t.studio.statuses[release.status as "draft"]}</p>
+            {release.status === "published" && <Link className="text-sm text-lilac underline" href={`/release/${release.id}`}>{w.view}</Link>}
+          </div>
+        </div>
+        {release.status === "removed" && release.removal_reason && <p className="alert alert-danger text-sm">{t.studio.removedReason}: {release.removal_reason}</p>}
+        <ol className="card divide-y divide-border">{list.map((tr) => <li key={tr.id} className="p-3 text-sm"><span className="mr-2 tabular-nums text-muted">{tr.track_number}.</span>{tr.title}</li>)}</ol>
+      </div>
+    );
+  }
+
+  // ---- Draft: three-step wizard ----
+  const step1Done = !has("title", "genre", "language", "cover");
+  const step2Done = !has("notracks", "trackTitle", "noaudio");
+  const reach = (step1Done ? (step2Done ? 3 : 2) : 1) as 1 | 2 | 3;
+  const wanted = Math.min(3, Math.max(1, Number(sp.step) || 1)) as 1 | 2 | 3;
+  if (wanted > reach) redirect(`/studio/releases/${id}?step=${reach}`);
+  const step = wanted;
+  const groups = await listGenres();
+  const types = t.studio.types;
+  const errKey = sp.error && sp.error in w.issues ? (sp.error as keyof typeof w.issues) : sp.error ? "save" : null;
+  const maxTracks = MAX_TRACKS[release.type as keyof typeof MAX_TRACKS];
+  const credits = (tr: (typeof list)[number], role: string) => (tr.track_credits as { name: string; role: string }[] | null ?? []).filter((c) => c.role === role).map((c) => c.name).join(", ");
+  const genreName = groups.flatMap((g) => g.genres).find((g) => g.id === release.genre_id)?.name ?? "";
+
+  return (
+    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
+      <div className="flex items-center justify-between gap-3">
+        <Link href="/studio" className="inline-flex min-h-11 items-center text-sm text-lilac underline">← {t.studio.title}</Link>
+        <form action={deleteDraft}><input type="hidden" name="releaseId" value={release.id} />
+          <button className="min-h-11 text-sm text-muted underline" type="submit">{w.deleteDraft}</button></form>
+      </div>
+      <h1 className="text-3xl font-bold">{step === 1 ? w.step1Title : step === 2 ? w.step2Title : w.step3Title}</h1>
+      <WizardSteps current={step} releaseId={release.id} reach={reach} labels={[w.steps.release, w.steps.tracks, w.steps.review]} />
+      {errKey && <p role="alert" className="alert alert-danger text-sm">{w.issues[errKey]}</p>}
+
+      {step === 1 && (
+        <ReleaseDetailsForm
+          releaseId={release.id}
+          initial={{ title: release.title, type: release.type, genreId: release.genre_id ?? "", language: release.language ?? "" }}
+          coverUrl={coverUrl} groups={groups} languages={languageOptions(locale)} types={types}
+          t={{ wizard: w, genre: t.studio.genre }} imageLabels={imageLabels}
+        />
+      )}
+
+      {step === 2 && (
+        <div className="flex flex-col gap-4">
+          <ul className="flex flex-col gap-4">
+            {list.map((tr, i) => (
+              <TrackEditor key={tr.id} trackId={tr.id} index={i} canRemove={list.length > 1}
+                initial={{ title: tr.title, explicit: tr.explicit, featured: credits(tr, "featured"), writers: credits(tr, "writer"), producers: credits(tr, "producer") }}
+                hasAudio={Boolean(tr.audio_path)} processing={tr.processing_status} t={t.studio} uploadLabels={uploadLabels} />
+            ))}
+          </ul>
+          {list.length < maxTracks
+            ? <form action={async () => { "use server"; await addTrackToRelease(id); redirect(`/studio/releases/${id}?step=2`); }}><button className="btn btn-secondary h-12 w-full" type="submit">+ {w.addAnother}</button></form>
+            : <p className="text-sm text-muted">{w.limitReached}</p>}
+          <p className="alert alert-warning text-sm">{t.studio.audioNote}</p>
+          <div className="flex items-center justify-between gap-3">
+            <Link className="btn btn-secondary inline-flex h-12 items-center" href={`/studio/releases/${id}?step=1`}>{w.back}</Link>
+            <div className="flex flex-col items-end gap-1">
+              {step2Done
+                ? <Link className="btn btn-primary inline-flex h-12 min-w-40 items-center justify-center" href={`/studio/releases/${id}?step=3`}>{w.continue}</Link>
+                : <button className="btn btn-primary h-12 min-w-40" disabled>{w.continue}</button>}
+              {!step2Done && <span className="text-xs text-muted">{w.needStep2}</span>}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {step === 3 && (
+        <div className="flex flex-col gap-5">
+          <p className="text-muted">{w.reviewIntro}</p>
+          <div className="card flex items-center gap-4 p-3">
+            <Cover url={coverUrl} seed={release.title} className="h-24 w-24" />
+            <div className="min-w-0">
+              <p className="truncate text-xl font-bold">{release.title}</p>
+              <p className="text-sm text-muted">{types[release.type as "single"]} · {genreName} · {languageLabel(release.language, locale)}</p>
+              <Link href={`/studio/releases/${id}?step=1`} className="text-sm text-lilac underline">{w.edit}</Link>
+            </div>
+          </div>
+          <ul className="card divide-y divide-border">
+            {list.map((tr) => (
+              <li key={tr.id} className="flex items-center justify-between gap-3 p-3 text-sm">
+                <span className="min-w-0 truncate"><span className="mr-2 tabular-nums text-muted">{tr.track_number}.</span>{tr.title}{tr.explicit && <span className="ml-2 rounded bg-plum px-1.5 text-xs">E</span>}</span>
+                <span className={tr.audio_path ? "text-success" : "text-danger"}>{tr.audio_path ? w.ready : w.needsAudio}</span>
+              </li>
+            ))}
+          </ul>
+          {issues.length > 0 && (
+            <div role="alert" className="alert alert-danger text-sm"><p className="font-semibold">{w.checklist}</p>
+              <ul className="mt-1 list-disc pl-5">{issues.map((i) => <li key={i}>{w.issues[i]}</li>)}</ul></div>
+          )}
+          <h2 className="text-xl font-bold">{w.rightsTitle}</h2>
+          <RightsForm releaseId={release.id} items={RIGHTS_ITEMS[locale]} blocked={issues.length > 0} labels={{ submit: w.submit, fixFirst: w.fixFirst }} />
+          <div className="rounded-xl border border-border bg-surface p-3 text-sm text-muted"><p className="font-semibold text-ivory">{w.nextTitle}</p><p>{w.nextBody}</p></div>
+          <Link className="btn btn-secondary inline-flex h-12 w-fit items-center" href={`/studio/releases/${id}?step=2`}>{w.back}</Link>
+        </div>
       )}
     </div>
   );

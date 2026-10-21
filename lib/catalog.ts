@@ -1,9 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
 import { mediaUrl } from "@/lib/storage";
 
+export type Credit = { name: string; role: string; artistSlug: string | null };
 export type CatalogTrack = {
   id: string; title: string; durationMs: number | null; audioUrl: string | null;
-  artistName: string; artistSlug: string; artistImageUrl: string | null;
+  audioLowUrl: string | null; audioOriginalUrl: string | null; explicit: boolean; credits: Credit[];
+  artistId: string; artistName: string; artistSlug: string; artistImageUrl: string | null;
   releaseId: string; releaseTitle: string; releaseType: string; coverUrl: string | null; releasedAt: string;
   genreName: string | null; genreSlug: string | null; categoryName: string | null; categorySlug: string | null;
   secondaryGenreName: string | null; trackNumber: number;
@@ -11,21 +13,27 @@ export type CatalogTrack = {
 
 type Row = {
   id: string; title: string; duration_ms: number | null; audio_path: string | null; track_number: number;
-  artists: { name: string; slug: string; image_url: string | null } | null;
+  audio_low_path: string | null; audio_std_path: string | null; explicit: boolean;
+  track_credits: { name: string; role: string; artist: { slug: string } | null }[] | null;
+  artists: { id: string; name: string; slug: string; image_url: string | null } | null;
   releases: { id: string; title: string; type: string; cover_path: string | null; created_at: string } | null;
   genre: { name: string; slug: string; category: { name: string; slug: string } | null } | null;
   secondary: { name: string } | null;
 };
-const SELECT = `id, title, duration_ms, audio_path, track_number,
-  artists(name, slug, image_url),
+const SELECT = `id, title, duration_ms, audio_path, track_number, audio_low_path, audio_std_path, explicit,
+  track_credits(name, role, artist:artists(slug)),
+  artists(id, name, slug, image_url),
   releases!inner(id, title, type, cover_path, created_at, status),
   genre:genres!tracks_genre_id_fkey(name, slug, category:genre_categories(name, slug)),
   secondary:genres!tracks_secondary_genre_id_fkey(name)`;
 
 function map(r: Row): CatalogTrack {
   return {
-    id: r.id, title: r.title, durationMs: r.duration_ms, audioUrl: mediaUrl(r.audio_path), trackNumber: r.track_number,
-    artistName: r.artists?.name ?? "", artistSlug: r.artists?.slug ?? "", artistImageUrl: mediaUrl(r.artists?.image_url),
+    id: r.id, title: r.title, durationMs: r.duration_ms, trackNumber: r.track_number,
+    // Prefer the optimized standard version; the original file is the fallback until processing finishes.
+    audioUrl: mediaUrl(r.audio_std_path ?? r.audio_path), audioLowUrl: mediaUrl(r.audio_low_path), audioOriginalUrl: mediaUrl(r.audio_path),
+    explicit: r.explicit, credits: (r.track_credits ?? []).map((c) => ({ name: c.name, role: c.role, artistSlug: c.artist?.slug ?? null })),
+    artistId: r.artists?.id ?? "", artistName: r.artists?.name ?? "", artistSlug: r.artists?.slug ?? "", artistImageUrl: mediaUrl(r.artists?.image_url),
     releaseId: r.releases?.id ?? "", releaseTitle: r.releases?.title ?? "", releaseType: r.releases?.type ?? "single",
     coverUrl: mediaUrl(r.releases?.cover_path), releasedAt: r.releases?.created_at ?? "",
     genreName: r.genre?.name ?? null, genreSlug: r.genre?.slug ?? null,
@@ -77,11 +85,12 @@ export async function getArtist(slug: string) {
   const supabase = await createClient();
   const { data: artist } = await supabase.from("artists").select("id, name, slug, bio, image_url").eq("slug", slug).maybeSingle();
   if (!artist) return null;
-  const [{ data }, { data: rels }] = await Promise.all([
+  const [{ data }, { data: rels }, { data: followers }] = await Promise.all([
     supabase.from("tracks").select(SELECT).eq("artist_id", artist.id).eq("releases.status", "published").order("created_at", { ascending: false }),
     supabase.from("releases").select(RSELECT).eq("artist_id", artist.id).eq("status", "published").order("created_at", { ascending: false }),
+    supabase.rpc("artist_follower_count", { a: artist.id }),
   ]);
-  return { artist: { ...artist, imageUrl: mediaUrl(artist.image_url) }, tracks: rows(data), releases: ((rels ?? []) as unknown as RRow[]).map(rmap) };
+  return { artist: { ...artist, imageUrl: mediaUrl(artist.image_url), followers: (followers as number | null) ?? 0 }, tracks: rows(data), releases: ((rels ?? []) as unknown as RRow[]).map(rmap) };
 }
 
 export type GenreGroup = { slug: string; name: string; genres: { id: string; slug: string; name: string }[] };
@@ -123,4 +132,14 @@ export async function featuredArtists(limit = 12) {
   const supabase = await createClient();
   const { data } = await supabase.from("artists").select("name, slug, image_url, releases!inner(status)").eq("releases.status", "published").limit(limit);
   return ((data ?? []) as unknown as { name: string; slug: string; image_url: string | null }[]).map((a) => ({ name: a.name, slug: a.slug, imageUrl: mediaUrl(a.image_url) }));
+}
+
+// Tracks by id, in the given order (liked songs, playlists). Only published tracks come back.
+export async function tracksByIds(ids: string[]) {
+  const valid = ids.filter((i) => UUID.test(i));
+  if (!valid.length) return [];
+  const supabase = await createClient();
+  const { data } = await supabase.from("tracks").select(SELECT).in("id", valid).eq("releases.status", "published");
+  const byId = new Map(rows(data).map((t) => [t.id, t]));
+  return valid.map((i) => byId.get(i)).filter((t): t is CatalogTrack => Boolean(t));
 }

@@ -1,13 +1,14 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, User } from "lucide-react";
+import { Home, Library, Search, User } from "lucide-react";
 
-export function BottomNav({ signedIn, labels }: { signedIn: boolean; labels: { home: string; search: string; profile: string; signIn: string } }) {
+export function BottomNav({ signedIn, labels }: { signedIn: boolean; labels: { home: string; search: string; library: string; profile: string; signIn: string } }) {
   const path = usePathname();
   const items = [
     { href: "/", label: labels.home, icon: Home, on: path === "/" },
     { href: "/search", label: labels.search, icon: Search, on: path.startsWith("/search") || path.startsWith("/genre") },
+    { href: signedIn ? "/library" : "/login?next=/library", label: labels.library, icon: Library, on: path.startsWith("/library") || path.startsWith("/playlist") },
     { href: signedIn ? "/profile" : "/login", label: signedIn ? labels.profile : labels.signIn, icon: User, on: path.startsWith("/profile") || path.startsWith("/login") },
   ];
   return (

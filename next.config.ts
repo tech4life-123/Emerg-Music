@@ -4,5 +4,10 @@ import type { NextConfig } from "next";
 const media = process.env.NEXT_PUBLIC_MEDIA_BASE_URL;
 const remotePatterns = media ? [{ protocol: "https" as const, hostname: new URL(media).hostname }] : [];
 
-const nextConfig: NextConfig = { images: { remotePatterns } };
+const nextConfig: NextConfig = {
+  images: { remotePatterns },
+  // The audio processing route runs the bundled ffmpeg binary, so make sure it ships with the function.
+  serverExternalPackages: ["ffmpeg-static"],
+  outputFileTracingIncludes: { "/api/audio/process": ["./node_modules/ffmpeg-static/ffmpeg"] },
+};
 export default nextConfig;

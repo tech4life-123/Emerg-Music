@@ -3,6 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import type { CatalogTrack } from "@/lib/catalog";
+import { useLibrary } from "@/components/library-provider";
 
 type Ctx = {
   queue: CatalogTrack[]; current: CatalogTrack | null; playing: boolean; progress: number; duration: number; volume: number; error: string | null;
@@ -14,6 +15,13 @@ export const GUEST_LIMIT = 5;
 export type GuestLabels = { title: string; body: string; create: string; signIn: string; counter: string; close: string };
 const readGuestPlays = () => { try { return Math.min(99, Number(document.cookie.match(/(?:^|; )guest_plays=(\d+)/)?.[1] ?? 0)); } catch { return 0; } };
 const writeGuestPlays = (n: number) => { try { document.cookie = `guest_plays=${n}; max-age=2592000; path=/; SameSite=Lax`; } catch {} };
+// Pick the lighter version on slow or metered connections (Data Saver, 2G/3G); otherwise the standard one.
+function pickSrc(track: CatalogTrack, attempt: number): string | null {
+  if (attempt > 0) return track.audioOriginalUrl; // last resort if a processed version fails to load
+  const c = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+  const slow = Boolean(c?.saveData) || ["slow-2g", "2g", "3g"].includes(c?.effectiveType ?? "");
+  return (slow && track.audioLowUrl) || track.audioUrl;
+}
 const PlayerContext = createContext<Ctx | null>(null);
 export const usePlayer = () => { const c = useContext(PlayerContext); if (!c) throw new Error("usePlayer outside provider"); return c; };
 
@@ -27,6 +35,10 @@ export function PlayerProvider({ children, guestLabels }: { children: React.Reac
   const [volume, setVol] = useState(1);
   const [error, setError] = useState<string | null>(null);
   const counted = useRef<string | null>(null);
+  const attempt = useRef(0);
+  const lib = useLibrary();
+  const blockedRef = useRef<string[]>([]);
+  blockedRef.current = lib.blockedIds;
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
   const [guestPlays, setGuestPlays] = useState(0);
   const [gateOpen, setGateOpen] = useState(false);
@@ -43,13 +55,20 @@ export function PlayerProvider({ children, guestLabels }: { children: React.Reac
 
   const load = useCallback((track: CatalogTrack | undefined) => {
     const el = audio.current; if (!el || !track) return;
-    setError(null); counted.current = null; setProgress(0);
-    if (!track.audioUrl) { setPlaying(false); setError("unavailable"); return; }
-    el.src = track.audioUrl;
+    setError(null); counted.current = null; setProgress(0); attempt.current = 0;
+    const src = pickSrc(track, 0);
+    if (!src) { setPlaying(false); setError("unavailable"); return; }
+    el.src = src;
     el.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
   }, []);
 
-  const playQueue = useCallback((tracks: CatalogTrack[], i: number) => { if (blocked) { setGateOpen(true); return; } setQueue(tracks); setIndex(i); load(tracks[i]); }, [load, blocked]);
+  const playQueue = useCallback((tracks: CatalogTrack[], i: number) => {
+    if (blocked) { setGateOpen(true); return; }
+    // Muted artists are left out of the queue, unless the listener picked that exact track.
+    const target = tracks[i];
+    const q = tracks.filter((t) => t.id === target?.id || !blockedRef.current.includes(t.artistId));
+    setQueue(q); setIndex(Math.max(0, q.findIndex((t) => t.id === target?.id))); load(target);
+  }, [load, blocked]);
   const next = useCallback(() => { if (blocked) { setPlaying(false); setGateOpen(true); return; } if (index + 1 < queue.length) { setIndex(index + 1); load(queue[index + 1]); } else setPlaying(false); }, [index, queue, load, blocked]);
   const prev = useCallback(() => {
     const el = audio.current; if (!el) return;
@@ -108,7 +127,11 @@ export function PlayerProvider({ children, guestLabels }: { children: React.Reac
         </div>
       )}
       <audio ref={audio} preload="none" onTimeUpdate={onTime} onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
-        onEnded={next} onPause={() => setPlaying(false)} onPlay={() => setPlaying(true)} onError={() => { setPlaying(false); setError("failed"); }} />
+        onEnded={next} onPause={() => setPlaying(false)} onPlay={() => setPlaying(true)} onError={() => {
+          const el = audio.current; const t = current;
+          if (el && t && attempt.current === 0 && t.audioOriginalUrl && t.audioOriginalUrl !== el.src) { attempt.current = 1; el.src = t.audioOriginalUrl; el.play().catch(() => {}); return; }
+          setPlaying(false); setError("failed");
+        }} />
     </PlayerContext.Provider>
   );
 }

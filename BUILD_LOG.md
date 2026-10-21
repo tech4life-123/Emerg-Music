@@ -48,3 +48,10 @@
 - Guest limit: 5 plays (30 s each) counted in a cookie; sign-up/sign-in sheet after that. Cookie-based, so clearing cookies resets it.
 - Link previews: Open Graph/Twitter metadata; cover or artist photo resized to 640 px via Next image; branded fallback card at /opengraph-image.
 - Open: track "Fake Life" (Ivyson) predates genres and has none; editing it needs a genre (SQL provided to owner).
+
+## Milestone 7: release wizard, audio optimization, follow and library (migration 0007)
+- Artist release flow in three steps (release + artwork, tracks + audio + credits, review + rights). Drafts autosave; upload progress bar; submit moves Draft -> In review (rights declaration v2, three confirmations).
+- New DB: releases.language/genre_id, tracks.explicit/processing_status/audio_low_path/audio_std_path, track_credits, artist_follows, artist_blocks, artist_follower_count(), set_track_audio_variants(), profile avatar folder check.
+- /api/audio/process: ffmpeg makes 128 kbps and 64 kbps AAC versions and reads the real duration. Player uses the low version on Data Saver / 2G / 3G and falls back to the original file if a processed one fails.
+- Likes, follows, "don't play this artist", playlists, Library tab, profile page, edit profile with photo, artist About + Credits card, track credits.
+- Verified with rolled-back SQL tests: artists cannot write processing fields, publish, or submit without rights; strangers cannot edit credits, variants or other users' follows/playlists; anon sees credits only for published tracks.

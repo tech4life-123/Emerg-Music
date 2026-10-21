@@ -1,6 +1,15 @@
 // Versioned rights declaration shown to artists and stored with each release (rights_declarations.statement_version).
-export const RIGHTS_VERSION = "v1";
-export const RIGHTS_STATEMENT = {
-  en: "I confirm that I own, or have written permission to control, all rights in this music and artwork, including any samples and featured performances. I grant Emerg Music permission to stream it. I understand it can be removed if a valid rights complaint is made, and that Emerg Music has not promised any payment per stream.",
-  fr: "Je confirme que je détiens, ou que j'ai l'autorisation écrite de gérer, tous les droits sur cette musique et ces visuels, y compris les échantillons et les interprètes invités. J'autorise Emerg Music à la diffuser. Je comprends qu'elle peut être retirée en cas de plainte valable sur les droits, et qu'Emerg Music n'a promis aucun paiement par écoute.",
+// v2 = three separate confirmations, all required.
+export const RIGHTS_VERSION = "v2";
+export const RIGHTS_ITEMS = {
+  en: [
+    "I own this music and artwork, or I have written permission from every rights holder to release it on Emerg Music, and I grant Emerg Music permission to stream it.",
+    "Any samples, beats or featured performances are cleared, and I have credited every contributor.",
+    "I understand Emerg Music may remove content after a valid rights complaint, and that no payment per stream has been promised.",
+  ],
+  fr: [
+    "Je détiens cette musique et ces visuels, ou j'ai l'autorisation écrite de chaque titulaire de droits pour les publier sur Emerg Music, et j'autorise Emerg Music à les diffuser.",
+    "Les échantillons, instrumentales et interprètes invités sont autorisés, et j'ai crédité chaque contributeur.",
+    "Je comprends qu'Emerg Music peut retirer un contenu après une plainte valable sur les droits, et qu'aucun paiement par écoute n'a été promis.",
+  ],
 } as const;

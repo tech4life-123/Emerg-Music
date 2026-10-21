@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getMessages } from "@/lib/i18n";
 import { requireUser } from "@/lib/auth";
-import { createRelease } from "./actions";
+import { startRelease } from "./release-actions";
 import { Cover } from "@/components/cover";
 import { MediaUpload } from "@/components/media-upload";
 import { mediaUrl } from "@/lib/storage";
@@ -53,14 +53,7 @@ export default async function StudioPage({ searchParams }: { searchParams: Promi
         <p className="mt-1 text-xs text-muted">{t.studio.playsNote}</p>
       </section>
       <section>
-        <h2 className="mb-3 text-xl font-bold">{t.studio.newRelease}</h2>
-        <form action={createRelease} className="card flex max-w-xl flex-wrap items-end gap-3 p-4">
-          <label className="flex min-w-48 flex-1 flex-col gap-1 text-sm">{t.studio.releaseTitle}<input className="input" name="title" required maxLength={120} /></label>
-          <label className="flex flex-col gap-1 text-sm">{t.studio.type}
-            <select className="input" name="type">{(["single", "ep", "album"] as const).map((k) => <option key={k} value={k}>{t.studio.types[k]}</option>)}</select>
-          </label>
-          <button className="btn btn-primary" type="submit">{t.studio.create}</button>
-        </form>
+        <form action={startRelease}><button className="btn btn-primary h-12" type="submit">+ {t.studio.wizard.newRelease}</button></form>
         {sp.error && <p role="alert" className="alert alert-danger mt-3 max-w-xl text-sm">{t.studio.errorGeneric}</p>}
       </section>
       <section>
@@ -69,7 +62,7 @@ export default async function StudioPage({ searchParams }: { searchParams: Promi
           <ul className="card divide-y divide-border">
             {releases.map((r) => (
               <li key={r.id} className="flex items-center justify-between gap-3 p-3">
-                <Link className="font-semibold hover:underline" href={`/studio/releases/${r.id}`}>{r.title}</Link>
+                <Link className="min-w-0 truncate font-semibold hover:underline" href={`/studio/releases/${r.id}`}>{r.title}</Link>
                 <span className="text-sm text-muted">{t.studio.types[r.type as "single"]} · {t.studio.statuses[r.status as "draft"]}</span>
               </li>
             ))}

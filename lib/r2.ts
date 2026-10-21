@@ -26,3 +26,27 @@ export async function presignAudioPut(key: string, contentType: string, size: nu
   });
   return getSignedUrl(client, new PutObjectCommand({ Bucket: R2_BUCKET, Key: key, ContentType: contentType, ContentLength: size }), { expiresIn: 600 });
 }
+
+// ---- Server-side object access (used by audio processing) ----
+import { GetObjectCommand } from "@aws-sdk/client-s3";
+import { createWriteStream, createReadStream } from "node:fs";
+import { stat } from "node:fs/promises";
+import { pipeline } from "node:stream/promises";
+import type { Readable } from "node:stream";
+
+function serverClient() {
+  if (!r2Configured) throw new Error("R2 not configured");
+  return new S3Client({
+    region: "auto", requestChecksumCalculation: "WHEN_REQUIRED", responseChecksumValidation: "WHEN_REQUIRED",
+    endpoint: `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+    credentials: { accessKeyId: R2_ACCESS_KEY_ID!, secretAccessKey: R2_SECRET_ACCESS_KEY! },
+  });
+}
+export async function downloadObject(key: string, toFile: string) {
+  const res = await serverClient().send(new GetObjectCommand({ Bucket: R2_BUCKET, Key: key }));
+  await pipeline(res.Body as Readable, createWriteStream(toFile));
+}
+export async function uploadFile(key: string, fromFile: string, contentType: string) {
+  const { size } = await stat(fromFile);
+  await serverClient().send(new PutObjectCommand({ Bucket: R2_BUCKET, Key: key, Body: createReadStream(fromFile), ContentType: contentType, ContentLength: size }));
+}

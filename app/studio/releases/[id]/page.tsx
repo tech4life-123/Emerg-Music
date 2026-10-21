@@ -83,6 +83,7 @@ export default async function ReleasePage({ params, searchParams }: { params: Pr
       </div>
       <h1 className="text-3xl font-bold">{step === 1 ? w.step1Title : step === 2 ? w.step2Title : w.step3Title}</h1>
       <WizardSteps current={step} releaseId={release.id} reach={reach} labels={[w.steps.release, w.steps.tracks, w.steps.review]} />
+      {release.removal_reason && <div role="status" className="alert alert-warning text-sm"><p className="font-semibold">{t.notifications.feedback}</p><p>{release.removal_reason}</p></div>}
       {errKey && <p role="alert" className="alert alert-danger text-sm">{w.issues[errKey]}</p>}
 
       {step === 1 && (

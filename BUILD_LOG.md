@@ -55,3 +55,8 @@
 - /api/audio/process: ffmpeg makes 128 kbps and 64 kbps AAC versions and reads the real duration. Player uses the low version on Data Saver / 2G / 3G and falls back to the original file if a processed one fails.
 - Likes, follows, "don't play this artist", playlists, Library tab, profile page, edit profile with photo, artist About + Credits card, track credits.
 - Verified with rolled-back SQL tests: artists cannot write processing fields, publish, or submit without rights; strangers cannot edit credits, variants or other users' follows/playlists; anon sees credits only for published tracks.
+
+## Milestone 8: admin review and notifications (migration 0008)
+- /admin/releases/[id]: listen to each track, see credits, audio versions, rights declaration; Approve and publish, Send back for changes (artist sees the note), or Remove.
+- In-app notifications (bell in header, /notifications): release published / removed / needs changes, application approved / rejected. Created only by database triggers.
+- Not yet exercised end to end with a real admin action; verify by approving a test release.

@@ -297,7 +297,31 @@
     "dismiss": "Rejeter",
     "by": "par",
     "links": "Liens",
-    "done": "Terminé."
+    "done": "Terminé.",
+    "review": "Examiner",
+    "reviewTitle": "Examiner la sortie",
+    "artist": "Artiste",
+    "genre": "Genre",
+    "language": "Langue",
+    "type": "Type",
+    "explicitTag": "Explicite",
+    "noAudio": "Pas d'audio",
+    "processing": "Versions audio",
+    "processingReady": "Optimisé (128 et 64 kbps)",
+    "processingPending": "Pas encore optimisé (l'original est lu)",
+    "processingFailed": "Optimisation échouée (l'original est lu)",
+    "creditsLabel": "Crédits",
+    "rightsDeclared": "Déclaration de droits",
+    "rightsNone": "Aucune déclaration de droits",
+    "rightsLine": "Acceptée {when} · version {v}",
+    "approvePublish": "Approuver et publier",
+    "sendBack": "Renvoyer pour modifications",
+    "sendBackHint": "L'artiste voit votre note et peut modifier puis soumettre à nouveau.",
+    "feedbackLabel": "Que faut-il changer ? (obligatoire)",
+    "removeHint": "À utiliser seulement pour une sortie qui ne doit pas être publiée.",
+    "back": "Retour à l'admin",
+    "checkAudio": "Écoutez chaque titre avant d'approuver.",
+    "notInReview": "Cette sortie n'attend pas d'examen."
   },
   "report": {
     "title": "Signaler un problème de droits d'auteur",
@@ -396,5 +420,18 @@
     "feat": "avec",
     "failed": "Cela n'a pas fonctionné. Réessayez.",
     "signInNeeded": "Connectez-vous pour utiliser votre bibliothèque."
+  },
+  "notifications": {
+    "title": "Notifications",
+    "none": "Aucune notification pour le moment.",
+    "markAll": "Tout marquer comme lu",
+    "kinds": {
+      "release_published": "Votre sortie « {title} » est en ligne sur Emerg Music.",
+      "release_removed": "Votre sortie « {title} » a été retirée. Raison : {reason}",
+      "release_changes": "« {title} » doit être modifiée avant sa mise en ligne : {reason}",
+      "application_approved": "Vous êtes maintenant Artiste sur Emerg Music. Bienvenue, {name} !",
+      "application_rejected": "Votre demande d'artiste n'a pas été approuvée. Raison : {reason}"
+    },
+    "feedback": "Retour de l'examen"
   }
 }

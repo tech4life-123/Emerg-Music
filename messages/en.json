@@ -297,7 +297,31 @@
     "dismiss": "Dismiss",
     "by": "by",
     "links": "Links",
-    "done": "Done."
+    "done": "Done.",
+    "review": "Review",
+    "reviewTitle": "Review release",
+    "artist": "Artist",
+    "genre": "Genre",
+    "language": "Language",
+    "type": "Type",
+    "explicitTag": "Explicit",
+    "noAudio": "No audio",
+    "processing": "Audio versions",
+    "processingReady": "Optimized (128 and 64 kbps)",
+    "processingPending": "Not optimized yet (original plays)",
+    "processingFailed": "Optimization failed (original plays)",
+    "creditsLabel": "Credits",
+    "rightsDeclared": "Rights declaration",
+    "rightsNone": "No rights declaration on file",
+    "rightsLine": "Accepted {when} · statement {v}",
+    "approvePublish": "Approve and publish",
+    "sendBack": "Send back for changes",
+    "sendBackHint": "The artist sees your note and can edit and resubmit.",
+    "feedbackLabel": "What should change? (required)",
+    "removeHint": "Use only for releases that must not be published.",
+    "back": "Back to admin",
+    "checkAudio": "Listen to each track before approving.",
+    "notInReview": "This release is not waiting for review."
   },
   "report": {
     "title": "Report a copyright issue",
@@ -396,5 +420,18 @@
     "feat": "feat.",
     "failed": "That didn't work. Please try again.",
     "signInNeeded": "Sign in to use your library."
+  },
+  "notifications": {
+    "title": "Notifications",
+    "none": "No notifications yet.",
+    "markAll": "Mark all as read",
+    "kinds": {
+      "release_published": "Your release “{title}” is live on Emerg Music.",
+      "release_removed": "Your release “{title}” was removed. Reason: {reason}",
+      "release_changes": "“{title}” needs changes before it can go live: {reason}",
+      "application_approved": "You are now an Artist on Emerg Music. Welcome, {name}!",
+      "application_rejected": "Your artist application was not approved. Reason: {reason}"
+    },
+    "feedback": "Feedback from review"
   }
 }

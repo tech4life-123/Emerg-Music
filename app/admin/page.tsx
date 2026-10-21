@@ -1,6 +1,7 @@
+import Link from "next/link";
 import { getMessages } from "@/lib/i18n";
 import { requireAdmin } from "@/lib/auth";
-import { approveApplication, publishRelease, rejectApplication, removeRelease, resolveReport } from "./actions";
+import { approveApplication, rejectApplication, resolveReport } from "./actions";
 
 export const metadata = { title: "Admin" };
 
@@ -36,16 +37,10 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
       </section>
 
       <section><h2 className="mb-3 text-xl font-bold">{t.admin.releases}</h2>
-        {releases.data?.length ? <ul className="flex flex-col gap-3">{releases.data.map((r) => (
-          <li key={r.id} className="card flex flex-col gap-3 p-4">
-            <p className="font-semibold">{r.title} <span className="font-normal text-muted">{t.admin.by} {(r.artists as unknown as { name: string } | null)?.name}</span></p>
-            <div className="flex flex-wrap items-end gap-3">
-              <form action={publishRelease}><input type="hidden" name="id" value={r.id} /><button className="btn btn-primary" type="submit">{t.admin.publish}</button></form>
-              <form action={removeRelease} className="flex flex-wrap items-end gap-2"><input type="hidden" name="id" value={r.id} />
-                <label className="flex flex-col gap-1 text-xs">{t.admin.reasonLabel}<input className="input" name="reason" required maxLength={500} /></label>
-                <button className="btn btn-secondary" type="submit">{t.admin.remove}</button></form>
-            </div>
-          </li>))}</ul> : <Empty />}
+        {releases.data?.length ? <ul className="card divide-y divide-border">{releases.data.map((r) => (
+          <li key={r.id}><Link href={`/admin/releases/${r.id}`} className="flex min-h-16 items-center justify-between gap-3 p-3 hover:bg-plum">
+            <span className="min-w-0 truncate font-semibold">{r.title} <span className="font-normal text-muted">{t.admin.by} {(r.artists as unknown as { name: string } | null)?.name}</span></span>
+            <span className="shrink-0 text-sm text-lilac">{t.admin.review} ›</span></Link></li>))}</ul> : <Empty />}
       </section>
 
       <section><h2 className="mb-3 text-xl font-bold">{t.admin.reports}</h2>

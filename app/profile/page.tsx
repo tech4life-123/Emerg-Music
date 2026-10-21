@@ -43,6 +43,7 @@ export default async function ProfilePage() {
         {role === "admin" && <Link href="/admin" className="btn btn-secondary inline-flex h-11 items-center rounded-full px-6">{P.admin}</Link>}
       </div>
       <div>
+        {row(t.notifications.title, "›", "/notifications")}
         {row(L.liked, liked.count ?? 0, "/library?tab=liked")}
         {row(L.playlists, lists.count ?? 0, "/library?tab=playlists")}
         {row(L.following, follows.count ?? 0, "/library?tab=following")}

@@ -18,7 +18,9 @@ export default async function ProfilePage() {
   ]);
   const name = profile?.display_name || user.email?.split("@")[0] || "";
   const L = t.library, P = t.profile;
-  const roleLabel = [P.roles.listener, artist || role === "artist" ? P.roles.artist : null, role === "admin" ? P.roles.admin : null].filter(Boolean).join(" · ");
+  // Listener until an artist application is approved; then Artist. Admin is added for admins.
+  const isArtist = Boolean(artist) || role === "artist";
+  const roleLabel = [isArtist ? P.roles.artist : P.roles.listener, role === "admin" ? P.roles.admin : null].filter(Boolean).join(" · ");
   const row = (label: string, value: React.ReactNode, href?: string) => {
     const inner = <><span className="flex-1">{label}</span><span className="text-muted">{value}</span></>;
     return href

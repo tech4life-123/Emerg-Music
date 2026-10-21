@@ -260,6 +260,23 @@
       "continueEditing": "Continuer",
       "statusLine": "{type} · {status}",
       "view": "Voir sur Emerg Music"
+    },
+    "imageUpload": {
+      "cover": {
+        "choose": "Téléverser la pochette",
+        "replace": "Changer la pochette",
+        "done": "Pochette téléversée."
+      },
+      "photo": {
+        "choose": "Téléverser une photo",
+        "replace": "Changer la photo",
+        "done": "Photo téléversée."
+      },
+      "errors": {
+        "size": "L'image est trop lourde (5 Mo max).",
+        "auth": "Vous ne pouvez pas téléverser ici.",
+        "notfound": "Introuvable, ou n'est plus un brouillon."
+      }
     }
   },
   "admin": {

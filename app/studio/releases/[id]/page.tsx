@@ -5,6 +5,7 @@ import { requireUser } from "@/lib/auth";
 import { RIGHTS_ITEMS } from "@/lib/rights";
 import { listGenres } from "@/lib/catalog";
 import { mediaUrl } from "@/lib/storage";
+import { imageUploadLabels } from "@/lib/upload-labels";
 import { languageLabel, languageOptions } from "@/lib/languages";
 import { MAX_TRACKS, releaseIssues, type Issue } from "@/lib/release-check";
 import { addTrackToRelease, deleteDraft } from "../../release-actions";
@@ -28,7 +29,7 @@ export default async function ReleasePage({ params, searchParams }: { params: Pr
   const { release, issues } = check;
   const w = t.studio.wizard;
   const coverUrl = mediaUrl(release.cover_path);
-  const imageLabels = { ...t.studio.upload, errors: { ...t.studio.upload.errors, type: t.studio.upload.imageTypeError, notfound: w.issues.notfound } };
+  const imageLabels = imageUploadLabels(t, "cover");
   const uploadLabels = { ...t.studio.upload, errors: { ...t.studio.upload.errors, notfound: w.issues.notfound } };
   const has = (...k: Issue[]) => k.some((x) => issues.includes(x));
 

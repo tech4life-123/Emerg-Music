@@ -260,6 +260,23 @@
       "continueEditing": "Continue",
       "statusLine": "{type} · {status}",
       "view": "View on Emerg Music"
+    },
+    "imageUpload": {
+      "cover": {
+        "choose": "Upload artwork",
+        "replace": "Change artwork",
+        "done": "Artwork uploaded."
+      },
+      "photo": {
+        "choose": "Upload photo",
+        "replace": "Change photo",
+        "done": "Photo uploaded."
+      },
+      "errors": {
+        "size": "Image is too large (max 5 MB).",
+        "auth": "You can't upload here.",
+        "notfound": "Not found, or no longer a draft."
+      }
     }
   },
   "admin": {

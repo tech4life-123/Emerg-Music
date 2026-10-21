@@ -5,6 +5,7 @@ import { startRelease } from "./release-actions";
 import { Cover } from "@/components/cover";
 import { MediaUpload } from "@/components/media-upload";
 import { mediaUrl } from "@/lib/storage";
+import { imageUploadLabels } from "@/lib/upload-labels";
 
 export const metadata = { title: "Artist Studio" };
 
@@ -45,7 +46,7 @@ export default async function StudioPage({ searchParams }: { searchParams: Promi
       <section className="card flex max-w-xl flex-wrap items-center gap-4 p-4">
         <Cover url={mediaUrl(artist.image_url)} seed={artist.name} round className="h-20 w-20" />
         <div className="min-w-0 flex-1"><h2 className="text-lg font-bold">{t.studio.photoTitle}</h2><p className="text-sm text-muted">{t.studio.photoHint}</p>
-          <MediaUpload kind="artist" targetId={artist.id} hasFile={Boolean(artist.image_url)} labels={{ ...t.studio.upload, errors: { ...t.studio.upload.errors, type: t.studio.upload.imageTypeError } }} /></div>
+          <MediaUpload kind="artist" targetId={artist.id} hasFile={Boolean(artist.image_url)} labels={imageUploadLabels(t, "photo")} /></div>
       </section>
       <section className="card max-w-sm p-5">
         <p className="text-sm text-muted">{t.studio.plays}</p>

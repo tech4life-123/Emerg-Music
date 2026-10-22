@@ -70,3 +70,7 @@
 ## Milestone 10 — Clearer release/track titles
 - Release title now explains itself (single/EP/album name; for a single use the song title).
 - Track title has a hint, and singles get a one-tap "Use release title as the song title" button.
+
+## Milestone 11 — Splash screen + installable app
+- Branded splash (logo + tagline) once per browser session; skipped for reduced-motion.
+- Web app manifest + icons so the site can be installed to a phone home screen (phones then show their own splash from the manifest icon and colours).

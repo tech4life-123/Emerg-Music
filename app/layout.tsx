@@ -7,6 +7,7 @@ import { SiteHeader } from "@/components/site-header";
 import { BottomNav } from "@/components/bottom-nav";
 import { createClient } from "@/lib/supabase/server";
 import { getLibraryState } from "@/lib/library";
+import { Splash } from "@/components/splash";
 import { LibraryProvider } from "@/components/library-provider";
 import Link from "next/link";
 import "./globals.css";
@@ -27,6 +28,8 @@ export const metadata: Metadata = {
   openGraph: { siteName: "Emerg Music", type: "website" },
   title: { default: "Emerg Music", template: "%s · Emerg Music" },
   description: "Discover. Stream. Share. Music from Liberia and Africa.",
+  icons: { apple: "/apple-touch-icon.png" },
+  appleWebApp: { capable: true, title: "Emerg Music", statusBarStyle: "black-translucent" },
 };
 export const viewport: Viewport = { themeColor: "#130f18" };
 
@@ -39,6 +42,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={locale} className={`${heading.variable} ${body.variable}`}>
       <body style={{ ["--font-heading" as string]: "var(--font-heading-loaded), ui-sans-serif, system-ui", ["--font-body" as string]: "var(--font-body-loaded), ui-sans-serif, system-ui" }}>
+        <Splash tagline={t.brand?.tagline ?? "Discover. Stream. Share."} />
         <LibraryProvider state={library} labels={t.library}>
         <PlayerProvider guestLabels={t.guest}>
           <SiteHeader />

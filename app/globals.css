@@ -5,3 +5,11 @@ html { color-scheme: dark; }
 body { background: var(--bg); color: var(--text); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
 h1, h2, h3 { font-family: var(--font-heading); letter-spacing: -0.01em; }
 a:focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: 4px; }
+
+/* Splash screen: shown once per session, fades out by itself */
+.splash { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; background: radial-gradient(700px 500px at 20% 0%, rgba(143,80,181,.4), transparent 70%), #130f18; animation: splash-out .5s ease 1.6s forwards; pointer-events: none; }
+.splash-logo { width: min(260px, 70vw); height: auto; animation: splash-in .7s ease both; }
+.splash-tag { color: #b9aec6; font-size: 14px; letter-spacing: .12em; text-transform: uppercase; animation: splash-in .7s ease .3s both; }
+@keyframes splash-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes splash-out { to { opacity: 0; visibility: hidden; } }
+@media (prefers-reduced-motion: reduce) { .splash { display: none; } }
